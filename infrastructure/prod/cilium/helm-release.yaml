@@ -1,0 +1,76 @@
+# See https://artifacthub.io/packages/helm/cilium/cilium
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cilium
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: cilium
+      version: "1.18.x"
+  values:
+    installNoConntrackIptablesRules: false
+    bpf:
+      masquerade: false
+    cni:
+      exclusive: true
+    nodePort:
+      enabled: true
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+    dashboards:
+      enabled: true
+    enableIPv4BIGTCP: true
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+    ipam:
+      mode: kubernetes
+    kubeProxyReplacement: true
+    # https://docs.cilium.io/en/stable/network/kubernetes/local-redirect-policy/
+    localRedirectPolicy: false
+    securityContext:
+      capabilities:
+        ciliumAgent:
+          - CHOWN
+          - KILL
+          - NET_ADMIN
+          - NET_RAW
+          - IPC_LOCK
+          - SYS_ADMIN
+          - SYS_RESOURCE
+          - DAC_OVERRIDE
+          - FOWNER
+          - SETGID
+          - SETUID
+        cleanCiliumState:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_RESOURCE
+    cgroup:
+      hostRoot: /sys/fs/cgroup
+      autoMount:
+        enabled: false
+    k8sServiceHost: localhost
+    k8sServicePort: 7445
+    routingMode: native
+    autoDirectNodeRoutes: true
+    ipv4NativeRoutingCIDR: 10.244.0.0/16
+    l2announcements:
+      enabled: true
+      leaseDuration: 3s
+      leaseRenewDeadline: 1s
+      leaseRetryPeriod: 200ms
+    loadBalancer:
+      mode: hybrid
+      algorithm: maglev
+      acceleration: best-effort
+      serviceTopology: true
+    envoy:
+      enabled: false

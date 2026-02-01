@@ -1,0 +1,164 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vmks
+spec:
+  driftDetection:
+    mode: enabled
+  chart:
+    spec:
+      version: "0.61.x"
+  values:
+    global:
+      clusterLabel: prod
+    kubeScheduler:
+      enabled: false
+    kubeControllerManager:
+      enabled: false
+    victoria-metrics-operator:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    defaultDashboards:
+      defaultTimezone: Europe/Moscow
+    defaultRules:
+      rules:
+        RecordingRulesNoData:
+          create: false
+      groups:
+        kubernetesSystemControllerManager:
+          create: false
+        kubernetesSystemScheduler:
+          create: false
+        etcd:
+          create: false
+    kubeEtcd:
+      enabled: false
+      service:
+        enabled: false
+    vmsingle:
+      spec:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          fsGroup: 65534
+        retentionPeriod: "1w"
+        storage:
+          storageClassName: local
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 3Gi
+    vmalert:
+      spec:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          fsGroup: 65534
+    vmagent:
+      spec:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          fsGroup: 65534
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "500m"
+          limits:
+            memory: "500Mi"
+            cpu: "1"
+    grafana:
+      sidecar:
+        datasources:
+          searchNamespace: ALL
+        dashboards:
+          searchNamespace: ALL
+      plugins:
+        - victoriametrics-logs-datasource
+      grafana.ini:
+        server:
+          root_url: https://grafana.${cluster_subdomain}
+        users:
+          auto_assign_org_role: "Editor"
+        auth.anonymous:
+          enabled: true
+          org_name: "Main Org."
+          org_role: "Admin"
+          hide_version: true
+    alertmanager:
+      useManagedConfig: true
+      spec:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          fsGroup: 65534
+      templateFiles:
+        yucca_telegram.tmpl: |-
+          {{ define "__text_alert_list" }}{{ range . }}
+          🪪 <b>Alertname:</b> {{ .Labels.alertname }}
+          {{- if .Annotations.summary }}
+          📝 <b>Summary:</b> {{ .Annotations.summary }}{{ end }}
+          {{- if .Annotations.description }}
+          📖 <b>Description:</b> {{ .Annotations.description }}{{ end }}
+          🛠 <a href="https://grafana.${cluster_subdomain}/">Grafana</a> 💊 <a href="https://alertmanager.${cluster_subdomain}/">Alertmanager</a> 💊 <a href="https://vmsingle.${cluster_subdomain}/vmui">Victoria Metrics</a> 🛠
+          {{ end }}
+          {{ end }}
+
+          {{ define "telegram.message" }}
+          {{ if gt (len .Alerts.Firing) 0 }}
+          🔥 Firing 🔥
+          {{ template "__text_alert_list" .Alerts.Firing }}
+          {{ end }}
+          {{ if gt (len .Alerts.Resolved) 0 }}
+          ✅ Resolved ✅
+          {{ template "__text_alert_list" .Alerts.Resolved }}
+          {{ end }}
+          {{ end }}
+      config:
+        route:
+          receiver: "blackhole"
+          routes:
+            - matchers:
+                - severity=~"info|warning|critical"
+              receiver: "telegram"
+              continue: true
+        receivers:
+          - name: blackhole
+          - name: telegram
+            telegram_configs:
+              - bot_token:
+                  name: telegram-token
+                  key: telegram-token
+                chat_id: -855473772
+                parse_mode: HTML
+                message: '{{ template "telegram.message" . }}'

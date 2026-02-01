@@ -1,0 +1,76 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ns-access
+spec:
+  description: "Policy for allow all communication inside namespace"
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - {}
+  egress:
+    - toEndpoints:
+        - {}
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: default-cluster
+  namespace: vaultwarden
+spec:
+  description: "Policy for allow egress to kube-apiserver"
+  endpointSelector: {}
+  ingress:
+    # allow access from cnpg-system
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "cnpg-system"
+    # allow access from istio-ingress
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "istio-ingress"
+    # allow access from envoy-gateway-system
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "envoy-gateway-system"
+    # allow access from monitoring
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "monitoring"
+
+  egress:
+    # allow access to kube-apiserver
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+    # allow access to kube-dns
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: "*"
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-db-s3
+spec:
+  description: "Policy for allow egress to database backups in s3"
+  endpointSelector: {}
+  egress:
+    - toFQDNs:
+        - matchName: s3.cloud.ru
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

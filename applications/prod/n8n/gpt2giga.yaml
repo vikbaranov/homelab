@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gpt2giga
+  labels:
+    app: gpt2giga
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gpt2giga
+  template:
+    metadata:
+      labels:
+        app: gpt2giga
+    spec:
+      imagePullSecrets:
+      - name: cloud-image-pull
+      containers:
+      - name: gpt2giga
+        image: homelab.cr.cloud.ru/gpt2giga:1.0.0
+        env:
+          - name: PROXY_HOST
+            value: 0.0.0.0
+          - name: GIGACHAT_MODEL
+            value: "GigaChat-2-Max"
+          - name: GIGACHAT_CREDENTIALS
+            valueFrom:
+              secretKeyRef:
+                key: GIGACHAT_CREDENTIALS
+                name: n8n
+        ports:
+        - name: http
+          containerPort: 8090
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "500Mi"
+          requests:
+            cpu: "500m"
+            memory: "500Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gpt2giga
+spec:
+  selector:
+    app: gpt2giga
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: http
+  type: ClusterIP

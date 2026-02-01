@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: piraeus
+  namespace: linstor
+spec:
+  ref:
+    tag: v2.9.1

@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: external-secrets
+resources:
+  - ../../base/external-secrets
+  - vaultwarden-secret-store.yaml
+  - namespace.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+patches:
+  - path: helm-release.yaml
+    target:
+      kind: HelmRelease
+configMapGenerator:
+  - name: external-secrets-dashboards
+    namespace: external-secrets
+    files:
+      - esecrets-dashboard.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
+        app.kubernetes.io/part-of: external-secrets
+        app.kubernetes.io/component: external-secrets
+        kustomize.toolkit.fluxcd.io/substitute: disabled

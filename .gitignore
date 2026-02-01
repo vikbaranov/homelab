@@ -1,0 +1,6 @@
+*.agekey
+*secret.yaml
+.envrc
+*secret.env
+.DS_Store
+secret.json

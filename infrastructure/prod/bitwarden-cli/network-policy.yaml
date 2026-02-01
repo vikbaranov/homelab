@@ -1,0 +1,12 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: external-secrets-ingress
+spec:
+  endpointSelector: {}
+  ingress:
+    # allow access from external-secrets
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": "external-secrets"

@@ -1,0 +1,14 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: immich-pvc-nfs
+  namespace: homelab
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 80Gi
+  volumeName: immich-pv-nfs
+  storageClassName: nfs-csi

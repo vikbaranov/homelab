@@ -1,0 +1,75 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: n8n
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "1.0.x"
+  values:
+    image:
+      repository: n8nio/n8n # {"$imagepolicy": "flux-system:n8n:name"}
+      tag: 2.6.2 # {"$imagepolicy": "flux-system:n8n:tag"}
+      pullPolicy: Always
+    main:
+      config:
+        n8n:
+          editor_base_url: https://n8n.${cluster_subdomain}
+        db:
+          type: postgresdb
+          postgresdb:
+            host: n8n-db-rw
+            user: n8n
+            pool:
+              size: 10
+            ssl:
+              enabled: true
+              reject_Unauthorized: true
+              ca_file: "/home/ssl/certs/postgresql/ca.crt"
+      extraEnv:
+        WEBHOOK_URL:
+          value: https://n8n.sleepfox.ru
+        DB_POSTGRESDB_PASSWORD:
+          valueFrom:
+            secretKeyRef:
+              name: n8n-db-app
+              key: password
+        N8N_ENCRYPTION_KEY:
+          valueFrom:
+            secretKeyRef:
+              name: n8n
+              key: N8N_ENCRYPTION_KEY
+      extraVolumeMounts:
+        - name: n8n-db-ca
+          mountPath: /home/ssl/certs/postgresql
+          readOnly: true
+        - name: cache
+          mountPath: /home/node/.cache
+      extraVolumes:
+        - name: n8n-db-ca
+          secret:
+            secretName: n8n-db-ca
+            items:
+              - key: ca.crt
+                path: ca.crt
+        - name: cache
+          emptyDir: {}
+      resources:
+        limits:
+          memory: 2048Mi
+        requests:
+          memory: 512Mi
+      podSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault

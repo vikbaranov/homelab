@@ -1,0 +1,4 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/refs/tags/v4.12.1/deploy/crd-csi-snapshot.yaml

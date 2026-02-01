@@ -1,0 +1,61 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "0.10.x"
+  test:
+    enable: false
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-server # {"$imagepolicy": "flux-system:immich-server:name"}
+              tag: v2.5.2 # {"$imagepolicy": "flux-system:immich-server:tag"}
+            env:
+              REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
+              IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
+              DB_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-db-app
+                    key: uri
+            securityContext:
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false
+              seccompProfile:
+                type: RuntimeDefault
+    immich:
+      persistence:
+        library:
+          existingClaim: immich-pvc-nfs
+    machine-learning:
+      persistence:
+        tmp:
+          type: emptyDir
+    valkey:
+      enabled: true
+      controllers:
+        main:
+          containers:
+            main:
+              image:
+                repository: docker.io/valkey/valkey
+                tag: 8.1-alpine@sha256:e706d1213aaba6896c162bb6a3a9e1894e1a435f28f8f856d14fab2e10aa098b
+                pullPolicy: IfNotPresent
+      persistence:
+        data:
+          enabled: true
+          size: 1Gi
+          type: emptyDir
+          accessMode: ReadWriteOnce

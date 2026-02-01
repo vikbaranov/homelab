@@ -1,0 +1,12 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: qbittorrent
+spec:
+  endpointSelector:
+    matchLabels:
+      app: qbittorrent
+  egress:
+    - toEntities:
+        - world

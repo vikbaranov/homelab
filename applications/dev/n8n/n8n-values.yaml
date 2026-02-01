@@ -1,0 +1,55 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: n8n
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "1.0.x"
+  values:
+    image:
+      repository: n8nio/n8n
+      tag: 1.122.4
+    main:
+      config:
+        n8n:
+          secure_cookie: false
+          hide_usage_page: true
+        db:
+          type: postgresdb
+          postgresdb:
+            host: n8n-db-rw
+            user: n8n
+            pool:
+              size: 10
+            ssl:
+              enabled: true
+              reject_Unauthorized: true
+              ca_file: "/home/ssl/certs/postgresql/ca.crt"
+      extraEnv:
+        DB_POSTGRESDB_PASSWORD:
+          valueFrom:
+            secretKeyRef:
+              name: n8n-db-app
+              key: password
+      extraVolumeMounts:
+        - name: n8n-db-ca
+          mountPath: /home/ssl/certs/postgresql
+          readOnly: true
+        - name: cache
+          mountPath: /home/node/.cache
+      extraVolumes:
+        - name: n8n-db-ca
+          secret:
+            secretName: n8n-db-ca
+            items:
+              - key: ca.crt
+                path: ca.crt
+        - name: cache
+          emptyDir: {}
+      resources:
+        limits:
+          memory: 2048Mi
+        requests:
+          memory: 512Mi

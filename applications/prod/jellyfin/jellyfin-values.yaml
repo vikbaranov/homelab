@@ -1,0 +1,48 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellyfin
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "2.4.x"
+  test:
+    enable: false
+  values:
+    image:
+      repository: jellyfin/jellyfin # {"$imagepolicy": "flux-system:jellyfin:name"}
+      tag: "10.11.6" # {"$imagepolicy": "flux-system:jellyfin:tag"}
+    persistence:
+      config:
+        enabled: true
+        existingClaim: "jellyfin-config-pvc"
+      media:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 40Gi
+        storageClass: "nfs-csi"
+        existingClaim: jellyfin-media-pvc
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    securityContext:
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+    volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: cache
+        emptyDir: {}
+    volumeMounts:
+      - name: tmp
+        mountPath: "/tmp"
+      - name: cache
+        mountPath: "/cache"

@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+spec:
+  template:
+    spec:
+      containers:
+        - image: linuxserver/qbittorrent:5.1.4 # {"$imagepolicy": "flux-system:qbittorrent"}
+          name: qbittorrent

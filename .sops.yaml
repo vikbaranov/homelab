@@ -1,0 +1,19 @@
+creation_rules:
+  # Prod secrets
+  - path_regex: .*prod/.*values-secret.yaml
+    age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
+  - path_regex: .*prod/.*secret.json
+    age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
+  - path_regex: .*prod/.*secret.env
+    age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
+  - path_regex: .*prod/.*.yaml
+    encrypted_regex: ^(data|stringData|value)$
+    age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
+  # Dev secrets
+  - path_regex: .*dev/.*values-secret.yaml
+    age: age1gzy9he4wke77lezhyfrux3jrs6x3gqtjlws5szmcrpknqf5qgpfqtjh9dk
+  - path_regex: .*dev/.*secret.env
+    age: age1gzy9he4wke77lezhyfrux3jrs6x3gqtjlws5szmcrpknqf5qgpfqtjh9dk
+  - path_regex: .*dev/.*.yaml
+    encrypted_regex: ^(data|stringData|value)$
+    age: age1gzy9he4wke77lezhyfrux3jrs6x3gqtjlws5szmcrpknqf5qgpfqtjh9dk

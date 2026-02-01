@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mattermost
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "6.6.x"
+  test:
+    enable: false
+  values:
+    image:
+      repository: homelab.cr.cloud.ru/mattermost
+      tag: 11.1.1@sha256:979d186d4d7349d32fce845b05695cc3dd513942cc171677fd1dfecbb63c9f1c
+    persistence:
+      data:
+        enabled: false
+      plugins:
+        enabled: false
+    mysql:
+      enabled: false
+    externalDB:
+      enabled: true
+    extraEnvVars:
+      - name: MM_SQLSETTINGS_DATASOURCE
+        valueFrom:
+          secretKeyRef:
+            name: mattermost-db-app
+            key: uri

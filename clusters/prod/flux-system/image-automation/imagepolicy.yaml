@@ -1,0 +1,77 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: qbittorrent
+spec:
+  imageRepositoryRef:
+    name: qbittorrent
+  policy:
+    semver:
+      range: 5.x.x
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: jellyfin
+spec:
+  imageRepositoryRef:
+    name: jellyfin
+  policy:
+    semver:
+      range: 10.11.x
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: immich-server
+spec:
+  imageRepositoryRef:
+    name: immich-server
+  policy:
+    semver:
+      range: 2.x.x
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: n8n
+spec:
+  imageRepositoryRef:
+    name: n8n
+  policy:
+    semver:
+      range: 2.x.x
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: open-webui
+spec:
+  imageRepositoryRef:
+    name: open-webui
+  policy:
+    semver:
+      range: 0.x.x
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: vaultwarden
+spec:
+  imageRepositoryRef:
+    name: vaultwarden
+  policy:
+    semver:
+      range: 1.x.x
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: blackbox-exporter
+spec:
+  imageRepositoryRef:
+    name: blackbox-exporter
+  policy:
+    semver:
+      range: 0.x.x

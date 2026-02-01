@@ -1,0 +1,68 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pod-cleaner-sa
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pod-cleaner
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pod-cleaner-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pod-cleaner
+subjects:
+  - kind: ServiceAccount
+    name: pod-cleaner-sa
+    namespace: kube-system
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-containers
+  namespace: kube-system
+spec:
+  schedule: "*/30 * * * *"   # every 30 minutes
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          serviceAccountName: pod-cleaner-sa
+          restartPolicy: Never
+          containers:
+            - name: cleaner
+              image: alpine/k8s:1.31.13
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+
+                  # Delete any pod whose .status anywhere mentions "ContainerStatusUnknown"
+                  kubectl get pods -A -o json \
+                  | jq -r '
+                      .items[]
+                      | select(.status | tostring | contains("ContainerStatusUnknown") or contains("Failed") or contains("Unknown") or contains("Succeeded"))
+                      | "\(.metadata.namespace) \(.metadata.name)"
+                    ' \
+                  | while read ns name; do
+                      [ -n "$ns" ] || continue
+                      echo "[pod-cleaner] deleting ${ns}/${name}"
+                      kubectl delete pod -n "$ns" "$name" --force --grace-period=0
+                    done
