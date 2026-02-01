@@ -58,6 +58,7 @@ make clean
 | [cloudnativepg](https://cloudnative-pg.io/)                          | Kubernetes operator for PostgreSQL                                                |
 | [external-secrets operator](https://external-secrets.io/)            | Manages secrets from external sources                                             |
 | [external-dns](https://kubernetes-sigs.github.io/external-dns/)      | Synchronizes exposed Kubernetes Services and Ingresses with DNS providers         |
+| [envoy gateway](https://gateway.envoyproxy.io/)                      | Kubernetes Gateway API implementation based on Envoy                              |
 | [fluxcd](https://fluxcd.io/)                                         | GitOps continuous delivery tool                                                   |
 | [grafana](https://grafana.com/)                                      | Observability platform                                                            |
 | [helm](https://helm.sh/)                                             | The package manager for Kubernetes                                                |
