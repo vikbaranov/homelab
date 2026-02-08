@@ -3,17 +3,18 @@
   "extends": [
     "config:recommended"
   ],
+  "ignorePaths": [
+    "applications/**/mattermost/**",
+    "applications/**/gpt2giga.yaml"
+  ],
   "kubernetes": {
     "managerFilePatterns": [
-      "/\\.yaml$/"
+      "/applications/.+\\.yaml$/"
     ]
   },
   "flux": {
     "managerFilePatterns": [
-      "/applications/.+\\.yaml$/",
-      "/crds/.+\\.yaml$/",
-      "/infrastructure/.+\\.yaml$/",
-      "/clusters/.+\\.yaml$/"
+      "/applications/.+\\.yaml$/"
     ]
   }
 }
