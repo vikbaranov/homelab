@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "dependencyDashboard": false,
+  "separateMajorMinor": false,
+  "ignorePaths": [
+    "applications/**/mattermost/**",
+    "applications/**/gpt2giga.yaml",
+    "infrastructure/**/bitwarden-cli/**"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "kubernetes",
+        "flux"
+      ],
+      "matchPackageNames": [
+        "*"
+      ],
+      "groupName": "all updates",
+      "groupSlug": "all-updates"
+    }
+  ],
+  "kubernetes": {
+    "managerFilePatterns": [
+      "/\\.yaml$/"
+    ]
+  },
+  "flux": {
+    "managerFilePatterns": [
+      "/applications/.+\\.yaml$/",
+      "/infrastructure/.+\\.yaml$/",
+      "/crds/.+\\.yaml$/"
+    ]
+  }
+}
