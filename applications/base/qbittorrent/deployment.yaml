@@ -21,7 +21,7 @@ spec:
         - env:
             - name: TZ
               value: UTC
-          image: linuxserver/qbittorrent:5.1.2
+          image: linuxserver/qbittorrent:5.1.4
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
