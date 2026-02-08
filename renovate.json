@@ -4,11 +4,13 @@
     "config:recommended"
   ],
   "dependencyDashboard": false,
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "branchConcurrentLimit": 0,
   "separateMajorMinor": false,
   "ignorePaths": [
     "applications/**/mattermost/**",
-    "applications/**/gpt2giga.yaml",
-    "infrastructure/**/bitwarden-cli/**"
+    "applications/**/gpt2giga.yaml"
   ],
   "packageRules": [
     {
@@ -25,14 +27,14 @@
   ],
   "kubernetes": {
     "managerFilePatterns": [
-      "/\\.yaml$/"
+      ".+\\.yaml$/"
     ]
   },
   "flux": {
     "managerFilePatterns": [
       "/applications/.+\\.yaml$/",
-      "/infrastructure/.+\\.yaml$/",
-      "/crds/.+\\.yaml$/"
+      "/crds/.+\\.yaml$/",
+      "/infrastructure/.+\\.yaml$/"
     ]
   }
 }
