@@ -30,4 +30,4 @@ jobs:
             --title="Pulling ${GITHUB_REF} into main" \
             --body=":crown: *An automated PR*" \
             --reviewer=vikbaranov \
-            --draft        
+            --draft
