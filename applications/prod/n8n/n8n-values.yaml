@@ -10,7 +10,7 @@ spec:
   values:
     image:
       repository: n8nio/n8n # {"$imagepolicy": "flux-system:n8n:name"}
-      tag: 2.7.2 # {"$imagepolicy": "flux-system:n8n:tag"}
+      tag: 2.7.3 # {"$imagepolicy": "flux-system:n8n:tag"}
       pullPolicy: Always
     main:
       config:
