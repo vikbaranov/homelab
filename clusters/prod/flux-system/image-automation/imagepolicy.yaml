@@ -46,17 +46,6 @@ spec:
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImagePolicy
 metadata:
-  name: open-webui
-spec:
-  imageRepositoryRef:
-    name: open-webui
-  policy:
-    semver:
-      range: 0.x.x
----
-apiVersion: image.toolkit.fluxcd.io/v1
-kind: ImagePolicy
-metadata:
   name: vaultwarden
 spec:
   imageRepositoryRef:
