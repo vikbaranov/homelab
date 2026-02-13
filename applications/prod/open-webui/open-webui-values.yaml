@@ -12,7 +12,7 @@ spec:
   values:
     image:
       repository: ghcr.io/open-webui/open-webui # {"$imagepolicy": "flux-system:open-webui:name"}
-      tag: "v0.7.2" # {"$imagepolicy": "flux-system:open-webui:tag"}
+      tag: "v0.8.0" # {"$imagepolicy": "flux-system:open-webui:tag"}
     pipelines:
       enabled: false
     ollama:
