@@ -49,7 +49,7 @@ bootstrap: setup
 		--repository=$${GITHUB_REPO} \
 		--personal \
 		--private=false \
-		--branch=main \
+		--branch=feature/structure \
 		--path=clusters/$(CLUSTER_NAME)
 	@echo "Waiting for all flux pods to be ready..."
 	kubectl --context "$(KIND_CONTEXT)" -n flux-system wait pod --all \
