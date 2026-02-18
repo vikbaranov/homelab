@@ -1,0 +1,6 @@
+{
+  "yaml.schemas": {
+    "/var/folders/pc/zqdl85rs7v11xcqwp861qn0m0000gn/T/dochub/schema.json": "*",
+    "schemaservice:/var/folders/pc/zqdl85rs7v11xcqwp861qn0m0000gn/T/dochub/schema.json": "file:///Users/vbaranov/projects/github/homelab/.github/workflows/image-auto-pr.yaml"
+  }
+}

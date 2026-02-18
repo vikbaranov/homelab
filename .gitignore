@@ -4,3 +4,5 @@
 *secret.env
 .DS_Store
 secret.json
+AGENTS.md
+.vscode

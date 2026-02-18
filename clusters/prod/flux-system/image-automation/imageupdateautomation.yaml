@@ -38,5 +38,5 @@ spec:
     name: flux-system
     namespace: flux-system
   update:
-    # path: ./applications
+    # path: ./clusters/prod/apps
     strategy: Setters

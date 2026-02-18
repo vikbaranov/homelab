@@ -11,9 +11,9 @@ creation_rules:
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
   # Dev secrets
   - path_regex: .*dev/.*values-secret.yaml
-    age: age1gzy9he4wke77lezhyfrux3jrs6x3gqtjlws5szmcrpknqf5qgpfqtjh9dk
+    age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln
   - path_regex: .*dev/.*secret.env
-    age: age1gzy9he4wke77lezhyfrux3jrs6x3gqtjlws5szmcrpknqf5qgpfqtjh9dk
+    age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln
   - path_regex: .*dev/.*.yaml
     encrypted_regex: ^(data|stringData|value)$
-    age: age1gzy9he4wke77lezhyfrux3jrs6x3gqtjlws5szmcrpknqf5qgpfqtjh9dk
+    age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln

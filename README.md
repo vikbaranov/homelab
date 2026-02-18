@@ -6,10 +6,10 @@ FluxCD configuration for my homelab Kubernetes cluster.
 
 Flux CD bootstraps the cluster and reconciles Kustomize overlays and Helm releases.
 
-- `clusters/` defines Flux bootstrap and cluster sync configuration per environment.
-- `crds/` holds operator CRDs that must exist before controllers are installed.
-- `infrastructure/` installs shared platform services (networking, storage, secrets, observability, service mesh, DNS).
-- `applications/` deploys user-facing workloads and app-specific configs.
+- `apps/base/` stores reusable app bases (`apps/base/<name>`).
+- `apps/bundles/` defines deployable sets (for example `dev-flex`, `prod-stable`) composed from cluster overlays.
+- `clusters/` contains cluster overlays (`clusters/<cluster>/apps/<name>`) plus Flux bootstrap.
+- `crds/` holds operator CRDs and is reconciled as a separate Flux dependency before bundles.
 
 ## Hardware
 
@@ -45,6 +45,7 @@ Requirements:
 Use Kind targets from the Makefile:
 
 ```bash
+make e2e
 make bootstrap
 make clean
 ```

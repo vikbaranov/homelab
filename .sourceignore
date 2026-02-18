@@ -6,6 +6,5 @@
 
 # Include manifest directories
 !/clusters/
-!/infrastructure/
-!/applications/
+!/apps/
 !/crds/
