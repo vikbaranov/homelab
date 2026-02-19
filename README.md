@@ -39,7 +39,7 @@ Secrets are encrypted in Git with SOPS (age) and decrypted by Flux using the `so
 Requirements:
 
 - `flux`, `kubectl`, and `kind` available in PATH.
-- `clusters/dev/sops.agekey` present for `make bootstrap`.
+- `clusters/local/sops.agekey` present for `make bootstrap`.
 - `GITHUB_OWNER` and `GITHUB_REPO` exported in the environment.
 
 Use Kind targets from the Makefile:

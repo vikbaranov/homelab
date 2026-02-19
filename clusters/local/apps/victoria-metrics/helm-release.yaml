@@ -9,7 +9,7 @@ spec:
       version: "*"
   values:
     global:
-      clusterLabel: dev
+      clusterLabel: local
     vmsingle:
       ingress:
         enabled: true

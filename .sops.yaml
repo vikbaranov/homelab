@@ -1,19 +1,19 @@
 creation_rules:
-  # Prod secrets
-  - path_regex: .*prod/.*values-secret.yaml
+  # Homekube secrets
+  - path_regex: .*homekube/.*values-secret.yaml
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
-  - path_regex: .*prod/.*secret.json
+  - path_regex: .*homekube/.*secret.json
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
-  - path_regex: .*prod/.*secret.env
+  - path_regex: .*homekube/.*secret.env
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
-  - path_regex: .*prod/.*.yaml
+  - path_regex: .*homekube/.*.yaml
     encrypted_regex: ^(data|stringData|value)$
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
-  # Dev secrets
-  - path_regex: .*dev/.*values-secret.yaml
+  # Local secrets
+  - path_regex: .*local/.*values-secret.yaml
     age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln
-  - path_regex: .*dev/.*secret.env
+  - path_regex: .*local/.*secret.env
     age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln
-  - path_regex: .*dev/.*.yaml
+  - path_regex: .*local/.*.yaml
     encrypted_regex: ^(data|stringData|value)$
     age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln

@@ -7,13 +7,13 @@ metadata:
 spec:
   dependsOn:
     - name: crds
-  interval: 30s
+  interval: 1m
   retryInterval: 1m
   timeout: 3m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./clusters/dev/apps
+  path: ./clusters/homekube/apps
   prune: true
   wait: false
   decryption:
@@ -22,6 +22,6 @@ spec:
       name: sops-age
   postBuild:
     substitute:
-      env: "dev"
-      cluster_name: "kind"
-      cluster_subdomain: "local"
+      env: "prod"
+      cluster_name: "talos_homelab"
+      cluster_subdomain: "talos.sleepfox.ru"

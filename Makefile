@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 CONFIG_DIR := .
-CLUSTER_NAME := dev
+CLUSTER_NAME := local
 KIND_CONFIG := $(CONFIG_DIR)/kind-config.yaml
 KIND_CONTEXT := kind-$(CLUSTER_NAME)
 SOPS_AGE_KEY := clusters/$(CLUSTER_NAME)/sops.agekey
