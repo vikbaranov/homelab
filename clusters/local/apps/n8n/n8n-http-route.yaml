@@ -6,7 +6,7 @@ metadata:
 spec:
   parentRefs:
     - name: internal
-      namespace: istio-ingress
+      namespace: envoy-gateway-system
   hostnames:
     - n8n.${cluster_subdomain}
   rules:

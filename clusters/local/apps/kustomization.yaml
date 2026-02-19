@@ -4,7 +4,7 @@ resources:
   - ../../../apps/bundles/dev-flex
   - cert-manager
   - cloudnative-pg
-  - istio
+  - envoy-gateway
   - n8n
   - podinfo
   - victoria-metrics
@@ -13,10 +13,6 @@ patches:
     target:
       kind: HelmRelease
       name: cert-manager
-  - path: istio/helm-release.yaml
-    target:
-      kind: HelmRelease
-      name: istiod
   - path: n8n/n8n-values.yaml
     target:
       kind: HelmRelease

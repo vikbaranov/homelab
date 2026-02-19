@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - ../../base/cert-manager
   - ../../base/cloudnative-pg
-  - ../../base/istio
+  - ../../base/envoy-gateway
   - ../../base/n8n
   - ../../base/podinfo
 patches:

@@ -6,4 +6,3 @@ resources:
   - ../base/victoria-metrics
   - ../base/cloudnative-pg
   - ../base/gateway-api
-  - ../base/istio
