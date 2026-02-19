@@ -13,7 +13,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/bundles/dev-flex
+  path: ./clusters/dev/apps
   prune: true
   wait: false
   decryption:

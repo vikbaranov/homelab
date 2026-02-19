@@ -1,0 +1,715 @@
+# See https://artifacthub.io/packages/helm/cilium/cilium
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: cilium
+      version: "1.18.x"
+  values:
+    installNoConntrackIptablesRules: false
+    bpf:
+      masquerade: false
+    cni:
+      exclusive: true
+    nodePort:
+      enabled: true
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+    dashboards:
+      enabled: true
+    enableIPv4BIGTCP: true
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+    ipam:
+      mode: kubernetes
+    kubeProxyReplacement: true
+    # https://docs.cilium.io/en/stable/network/kubernetes/local-redirect-policy/
+    localRedirectPolicy: false
+    securityContext:
+      capabilities:
+        ciliumAgent:
+          - CHOWN
+          - KILL
+          - NET_ADMIN
+          - NET_RAW
+          - IPC_LOCK
+          - SYS_ADMIN
+          - SYS_RESOURCE
+          - DAC_OVERRIDE
+          - FOWNER
+          - SETGID
+          - SETUID
+        cleanCiliumState:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_RESOURCE
+    cgroup:
+      hostRoot: /sys/fs/cgroup
+      autoMount:
+        enabled: false
+    k8sServiceHost: localhost
+    k8sServicePort: 7445
+    routingMode: native
+    autoDirectNodeRoutes: true
+    ipv4NativeRoutingCIDR: 10.244.0.0/16
+    l2announcements:
+      enabled: true
+      leaseDuration: 3s
+      leaseRenewDeadline: 1s
+      leaseRetryPeriod: 200ms
+    loadBalancer:
+      mode: hybrid
+      algorithm: maglev
+      acceleration: best-effort
+      serviceTopology: true
+    envoy:
+      enabled: false
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: piraeus-operator
+  namespace: linstor
+spec:
+  chart:
+    spec:
+      version: "2.9.1"
+---
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-secrets
+  namespace: external-secrets
+spec:
+  chart:
+    spec:
+      version: "0.20.x"
+  values:
+    serviceMonitor:
+      enabled: true
+    bitwarden-sdk-server:
+      enabled: false
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  dependsOn:
+    - name: external-secrets
+      namespace: external-secrets
+  chart:
+    spec:
+      version: "1.19.x"
+  values:
+    extraArgs:
+      - --dns01-recursive-nameservers-only
+      - --dns01-recursive-nameservers=192.168.100.2:53
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: csi-nfs
+  namespace: csi-nfs
+spec:
+  chart:
+    spec:
+      version: "4.12.x"
+  values:
+    storageClass:
+      create: true
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+      name: nfs-csi
+      parameters:
+        server: 192.168.100.3
+        share: /data
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
+      mountOptions:
+        - nfsvers=4.1
+    externalSnapshotter:
+      customResourceDefinitions:
+        enabled: false
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudnative-pg
+  namespace: cnpg-system
+spec:
+  chart:
+    spec:
+      version: ">= 0.20.0 <= 0.30.0"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vmks
+  namespace: monitoring
+spec:
+  driftDetection:
+    mode: enabled
+  chart:
+    spec:
+      version: "0.61.x"
+  values:
+    global:
+      clusterLabel: prod
+    kubeScheduler:
+      enabled: false
+    kubeControllerManager:
+      enabled: false
+    victoria-metrics-operator:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    defaultDashboards:
+      defaultTimezone: Europe/Moscow
+    defaultRules:
+      rules:
+        RecordingRulesNoData:
+          create: false
+      groups:
+        kubernetesSystemControllerManager:
+          create: false
+        kubernetesSystemScheduler:
+          create: false
+        etcd:
+          create: false
+    kubeEtcd:
+      enabled: false
+      service:
+        enabled: false
+    vmsingle:
+      spec:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          fsGroup: 65534
+        retentionPeriod: "1w"
+        storage:
+          storageClassName: local
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 3Gi
+    vmalert:
+      spec:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          fsGroup: 65534
+    vmagent:
+      spec:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          fsGroup: 65534
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "500m"
+          limits:
+            memory: "500Mi"
+            cpu: "1"
+    grafana:
+      sidecar:
+        datasources:
+          searchNamespace: ALL
+        dashboards:
+          searchNamespace: ALL
+      plugins:
+        - victoriametrics-logs-datasource
+      grafana.ini:
+        server:
+          root_url: https://grafana.${cluster_subdomain}
+        users:
+          auto_assign_org_role: "Editor"
+        auth.anonymous:
+          enabled: true
+          org_name: "Main Org."
+          org_role: "Admin"
+          hide_version: true
+    alertmanager:
+      useManagedConfig: true
+      spec:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          fsGroup: 65534
+      templateFiles:
+        yucca_telegram.tmpl: "{{ define \"__text_alert_list\" }}{{ range . }}\n\U0001FAAA <b>Alertname:</b> {{ .Labels.alertname }}\n{{- if .Annotations.summary }}\n\U0001F4DD <b>Summary:</b> {{ .Annotations.summary }}{{ end }}\n{{- if .Annotations.description }}\n\U0001F4D6 <b>Description:</b> {{ .Annotations.description }}{{ end }}\n\U0001F6E0 <a href=\"https://grafana.${cluster_subdomain}/\">Grafana</a> \U0001F48A <a href=\"https://alertmanager.${cluster_subdomain}/\">Alertmanager</a> \U0001F48A <a href=\"https://vmsingle.${cluster_subdomain}/vmui\">Victoria Metrics</a> \U0001F6E0\n{{ end }}\n{{ end }}\n\n{{ define \"telegram.message\" }}\n{{ if gt (len .Alerts.Firing) 0 }}\n\U0001F525 Firing \U0001F525\n{{ template \"__text_alert_list\" .Alerts.Firing }}\n{{ end }}\n{{ if gt (len .Alerts.Resolved) 0 }}\n✅ Resolved ✅\n{{ template \"__text_alert_list\" .Alerts.Resolved }}\n{{ end }}\n{{ end }}"
+      config:
+        route:
+          receiver: "blackhole"
+          routes:
+            - matchers:
+                - severity=~"info|warning|critical"
+              receiver: "telegram"
+              continue: true
+        receivers:
+          - name: blackhole
+          - name: telegram
+            telegram_configs:
+              - bot_token:
+                  name: telegram-token
+                  key: telegram-token
+                chat_id: -855473772
+                parse_mode: HTML
+                message: '{{ template "telegram.message" . }}'
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vls
+  namespace: monitoring
+spec:
+  driftDetection:
+    mode: enabled
+  chart:
+    spec:
+      version: "0.11.x"
+  dependsOn:
+    - name: "vmks"
+      namespace: "monitoring"
+  values:
+    server:
+      persistentVolume:
+        enabled: true
+        size: 2Gi
+        storageClassName: "local"
+      retentionDiskSpaceUsage: 1.5GiB
+      vmServiceScrape:
+        enabled: true
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    vector:
+      enabled: true
+    dashboards:
+      enabled: true
+      labels:
+        grafana_dashboard: "1"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: blackbox-exporter
+  namespace: monitoring
+spec:
+  chart:
+    spec:
+      version: "11.x.x"
+  dependsOn:
+    - name: "vmks"
+      namespace: "monitoring"
+  values:
+    image:
+      tag: v0.28.0 # {"$imagepolicy": "flux-system:blackbox-exporter:tag"}
+    serviceMonitor:
+      selfMonitor:
+        enabled: true
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    config:
+      modules:
+        http_2xx:
+          prober: http
+          timeout: 5s
+          http:
+            valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+            follow_redirects: true
+            preferred_ip_protocol: "ip4"
+            tls_config:
+              insecure_skip_verify: true
+---
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  releaseName: external-dns-public
+  chart:
+    spec:
+      chart: external-dns
+      version: "1.19.x"
+  values:
+    sources:
+      - service
+    domainFilters:
+      - sleepfox.ru
+    annotationFilter: "external-dns.alpha.kubernetes.io/enabled=true"
+    policy: sync
+    provider:
+      name: cloudflare
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-api-token
+            key: cloudflare-api-token
+    serviceMonitor:
+      enabled: true
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "0.10.x"
+  test:
+    enable: false
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-server # {"$imagepolicy": "flux-system:immich-server:name"}
+              tag: v2.5.6 # {"$imagepolicy": "flux-system:immich-server:tag"}
+            env:
+              REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
+              IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
+              DB_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-db-app
+                    key: uri
+            securityContext:
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false
+              seccompProfile:
+                type: RuntimeDefault
+    immich:
+      persistence:
+        library:
+          existingClaim: immich-pvc-nfs
+    machine-learning:
+      persistence:
+        tmp:
+          type: emptyDir
+    valkey:
+      enabled: true
+      controllers:
+        main:
+          containers:
+            main:
+              image:
+                repository: docker.io/valkey/valkey
+                tag: 8.1-alpine@sha256:e706d1213aaba6896c162bb6a3a9e1894e1a435f28f8f856d14fab2e10aa098b
+                pullPolicy: IfNotPresent
+      persistence:
+        data:
+          enabled: true
+          size: 1Gi
+          type: emptyDir
+          accessMode: ReadWriteOnce
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellyfin
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "2.4.x"
+  test:
+    enable: false
+  values:
+    image:
+      repository: jellyfin/jellyfin # {"$imagepolicy": "flux-system:jellyfin:name"}
+      tag: "10.11.6" # {"$imagepolicy": "flux-system:jellyfin:tag"}
+    persistence:
+      config:
+        enabled: true
+        existingClaim: "jellyfin-config-pvc"
+      media:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 40Gi
+        storageClass: "nfs-csi"
+        existingClaim: jellyfin-media-pvc
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    securityContext:
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+    volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: cache
+        emptyDir: {}
+    volumeMounts:
+      - name: tmp
+        mountPath: "/tmp"
+      - name: cache
+        mountPath: "/cache"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: n8n
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "1.0.x"
+  values:
+    image:
+      repository: n8nio/n8n # {"$imagepolicy": "flux-system:n8n:name"}
+      tag: 2.8.2 # {"$imagepolicy": "flux-system:n8n:tag"}
+      pullPolicy: Always
+    main:
+      config:
+        n8n:
+          editor_base_url: https://n8n.${cluster_subdomain}
+        db:
+          type: postgresdb
+          postgresdb:
+            host: n8n-db-rw
+            user: n8n
+            pool:
+              size: 10
+            ssl:
+              enabled: true
+              reject_Unauthorized: true
+              ca_file: "/home/ssl/certs/postgresql/ca.crt"
+      extraEnv:
+        WEBHOOK_URL:
+          value: https://n8n.sleepfox.ru
+        DB_POSTGRESDB_PASSWORD:
+          valueFrom:
+            secretKeyRef:
+              name: n8n-db-app
+              key: password
+        N8N_ENCRYPTION_KEY:
+          valueFrom:
+            secretKeyRef:
+              name: n8n
+              key: N8N_ENCRYPTION_KEY
+      extraVolumeMounts:
+        - name: n8n-db-ca
+          mountPath: /home/ssl/certs/postgresql
+          readOnly: true
+        - name: cache
+          mountPath: /home/node/.cache
+      extraVolumes:
+        - name: n8n-db-ca
+          secret:
+            secretName: n8n-db-ca
+            items:
+              - key: ca.crt
+                path: ca.crt
+        - name: cache
+          emptyDir: {}
+      resources:
+        limits:
+          memory: 2048Mi
+        requests:
+          memory: 512Mi
+      podSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+  namespace: homelab
+spec:
+  releaseName: open-webui
+  interval: 15m
+  chart:
+    spec:
+      version: "8.12.x"
+  values:
+    image:
+      repository: ghcr.io/open-webui/open-webui # {"$imagepolicy": "flux-system:open-webui:name"}
+      tag: "v0.8.0" # {"$imagepolicy": "flux-system:open-webui:tag"}
+    pipelines:
+      enabled: false
+    ollama:
+      ollama:
+        models:
+          pull:
+            - PetrosStav/gemma3-tools:4b
+    persistence:
+      enabled: true
+      size: 2Gi
+      storageClass: "local"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: ">=1.0.0-alpha"
+  test:
+    enable: false
+  values:
+    httpRoute:
+      enabled: true
+      parentRefs:
+        - name: internal
+          namespace: envoy-gateway-system
+      hostnames:
+        - podinfo.${cluster_subdomain}
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    securityContext:
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+spec:
+  template:
+    spec:
+      containers:
+        - image: linuxserver/qbittorrent:5.1.4 # {"$imagepolicy": "flux-system:qbittorrent"}
+          name: qbittorrent
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+spec:
+  chart:
+    spec:
+      version: "0.34.x"
+  test:
+    enable: false
+  valuesFrom:
+    - kind: Secret
+      name: vaultwarden-values
+  values:
+    timeZone: "Europe/Moscow"
+    image:
+      tag: 1.35.3 # {"$imagepolicy": "flux-system:vaultwarden:tag"}
+    domain: "https://vaultwarden.${cluster_subdomain}"
+    database:
+      type: postgresql
+      existingSecret: "vaultwarden-db-app"
+      existingSecretKey: "uri"
+    serviceAccount:
+      create: true
+      name: "vaultwarden-svc"
+    signupsAllowed: false
+    resources:
+      limits:
+        cpu: 300m
+        memory: 300Mi
+      requests:
+        cpu: 50m
+        memory: 150Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsGroup: 1001
+      runAsUser: 1001
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: RuntimeDefault
+    podSecurityContext:
+      fsGroup: 1001
+      supplementalGroups:
+        - 1001
+    extraVolumes:
+      - name: data
+        emptyDir: {}
+    extraVolumeMounts:
+      - name: data
+        mountPath: /data

@@ -2,12 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: monitoring
 resources:
-  - ../../../../apps/base/blackbox-exporter
   - vmrule.yaml
-patches:
-  - path: helm-release.yaml
-    target:
-      kind: HelmRelease
 configMapGenerator:
   - name: blackbox-exporter-dashboards
     namespace: monitoring

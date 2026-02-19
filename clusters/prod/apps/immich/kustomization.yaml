@@ -4,12 +4,7 @@ namespace: homelab
 resources:
   - pv.yaml
   - pvc.yaml
-  - ../../../../apps/base/immich
   - vmprobe.yaml
   - database.yaml
   - immich-http-route.yaml
   - networkpolicy.yaml
-patches:
-  - path: immich-values.yaml
-    target:
-      kind: HelmRelease

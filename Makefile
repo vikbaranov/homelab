@@ -65,9 +65,9 @@ reconcile:
 
 wait:
 	@echo "Waiting for Flux kustomizations to become Ready..."
-	flux --context "$(KIND_CONTEXT)" -n flux-system wait kustomization flux-system --timeout=5m
-	flux --context "$(KIND_CONTEXT)" -n flux-system wait kustomization crds --timeout=10m
-	flux --context "$(KIND_CONTEXT)" -n flux-system wait kustomization bundle --timeout=15m
+	kubectl --context "$(KIND_CONTEXT)" -n flux-system wait kustomizations.kustomize.toolkit.fluxcd.io/flux-system --for=condition=Ready=True --timeout=5m
+	kubectl --context "$(KIND_CONTEXT)" -n flux-system wait kustomizations.kustomize.toolkit.fluxcd.io/crds --for=condition=Ready=True --timeout=10m
+	kubectl --context "$(KIND_CONTEXT)" -n flux-system wait kustomizations.kustomize.toolkit.fluxcd.io/bundle --for=condition=Ready=True --timeout=15m
 
 smoke:
 	@echo "Running smoke checks..."

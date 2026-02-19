@@ -1,29 +1,24 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../clusters/prod/namespaces.yaml
-  - ../../../clusters/prod/apps/cilium
-  - ../../../clusters/prod/apps/linstor
-  - ../../../clusters/prod/apps/external-secrets
-  - ../../../clusters/prod/apps/cert-manager
-  - ../../../clusters/prod/apps/csi-nfs
-  - ../../../clusters/prod/apps/cloudnative-pg
-  # - ../../../clusters/prod/apps/istio
-  - ../../../clusters/prod/apps/envoy-gateway
-  - ../../../clusters/prod/apps/victoria-metrics
-  - ../../../clusters/prod/apps/victoria-logs
-  - ../../../clusters/prod/apps/blackbox-exporter
-  - ../../../clusters/prod/apps/external-dns
-  - ../../../apps/base/metrics-server
-  - ../../../clusters/prod/apps/misc
-  - ../../../clusters/prod/apps/immich
-  - ../../../clusters/prod/apps/bitwarden-cli
-  - ../../../clusters/prod/apps/it-tools
-  - ../../../clusters/prod/apps/jellyfin
-  # - ../../../clusters/prod/apps/mattermost
-  - ../../../clusters/prod/apps/n8n
-  - ../../../clusters/prod/apps/open-webui
-  - ../../../clusters/prod/apps/podinfo
-  - ../../../clusters/prod/apps/qbittorrent
-  - ../../../clusters/prod/apps/vaultwarden
-  - ../../../clusters/prod/misc
+  - ../../base/cilium
+  - ../../base/linstor
+  - ../../base/external-secrets
+  - ../../base/cert-manager
+  - ../../base/csi-nfs
+  - ../../base/cloudnative-pg
+  - ../../base/envoy-gateway
+  - ../../base/victoria-metrics
+  - ../../base/victoria-logs
+  - ../../base/blackbox-exporter
+  - ../../base/external-dns
+  - ../../base/immich
+  - ../../base/it-tools
+  - ../../base/jellyfin
+  - ../../base/n8n
+  - ../../base/open-webui
+  - ../../base/podinfo
+  - ../../base/qbittorrent
+  - ../../base/vaultwarden
+patches:
+  - path: prod-stable.yaml

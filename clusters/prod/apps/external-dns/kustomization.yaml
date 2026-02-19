@@ -2,15 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: external-dns
 resources:
-  - ../../../../apps/base/external-dns
   - secrets.yaml
   - namespace.yaml
 generatorOptions:
   disableNameSuffixHash: true
-patches:
-  - path: helm-release-public.yaml
-    target:
-      kind: HelmRelease
 configMapGenerator:
   - name: external-dns-dashboards
     namespace: external-dns

@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - pod-cleaner.yaml
   # - networkpolicy.yaml
- 

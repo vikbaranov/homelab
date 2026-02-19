@@ -1,10 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../clusters/dev/namespaces.yaml
-  - ../../../clusters/dev/apps/cert-manager
-  - ../../../clusters/dev/apps/cloudnative-pg
-  - ../../../clusters/dev/apps/istio
-  # - ../../../clusters/dev/apps/victoria-metrics
-  - ../../../clusters/dev/apps/n8n
-  - ../../../clusters/dev/apps/podinfo
+  - ../../base/cert-manager
+  - ../../base/cloudnative-pg
+  - ../../base/istio
+  - ../../base/n8n
+  - ../../base/podinfo
+patches:
+  - path: dev-flex.yaml

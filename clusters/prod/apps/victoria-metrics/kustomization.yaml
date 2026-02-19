@@ -6,10 +6,5 @@ resources:
   # - grafana-dashboardDefinitions.yaml
   - helm-repo.yaml
   - secrets.yaml
-  - ../../../../apps/base/victoria-metrics
   - grafana-http-route.yaml
   - vmsingle-http-route.yaml
-patches:
-  - path: helm-release.yaml
-    target:
-      kind: HelmRelease

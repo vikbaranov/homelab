@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../../apps/bundles/prod-stable
+  - ../namespaces.yaml
+  - bitwarden-cli
+  - blackbox-exporter
+  - cert-manager
+  - cilium
+  - cloudnative-pg
+  - csi-nfs
+  - envoy-gateway
+  - external-dns
+  - external-secrets
+  - immich
+  - istio
+  - it-tools
+  - jellyfin
+  - linstor
+  - mattermost
+  - misc
+  - n8n
+  - open-webui
+  - podinfo
+  - qbittorrent
+  - vaultwarden
+  - victoria-logs
+  - victoria-metrics
+  - ../misc

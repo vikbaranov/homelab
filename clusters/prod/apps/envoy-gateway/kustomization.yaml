@@ -2,7 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: envoy-gateway-system
 resources:
-  - ../../../../apps/base/envoy-gateway
   - gw-class.yaml
   - gw-internal.yaml
   - gw-external.yaml

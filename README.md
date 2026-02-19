@@ -7,7 +7,7 @@ FluxCD configuration for my homelab Kubernetes cluster.
 Flux CD bootstraps the cluster and reconciles Kustomize overlays and Helm releases.
 
 - `apps/base/` stores reusable app bases (`apps/base/<name>`).
-- `apps/bundles/` defines deployable sets (for example `dev-flex`, `prod-stable`) composed from cluster overlays.
+- `apps/bundles/` defines deployable sets (for example `dev-flex`, `prod-stable`) using base app references plus one cluster patch file per bundle.
 - `clusters/` contains cluster overlays (`clusters/<cluster>/apps/<name>`) plus Flux bootstrap.
 - `crds/` holds operator CRDs and is reconciled as a separate Flux dependency before bundles.
 
