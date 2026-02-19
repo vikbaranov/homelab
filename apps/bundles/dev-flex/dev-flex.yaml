@@ -90,7 +90,7 @@ spec:
       enabled: true
       parentRefs:
         - name: internal
-          namespace: envoy-gateway-system
+          namespace: istio-ingress
       hostnames:
         - podinfo.${cluster_subdomain}
     podSecurityContext:

@@ -4,6 +4,7 @@ CLUSTER_NAME := dev
 KIND_CONFIG := $(CONFIG_DIR)/kind-config.yaml
 KIND_CONTEXT := kind-$(CLUSTER_NAME)
 SOPS_AGE_KEY := clusters/$(CLUSTER_NAME)/sops.agekey
+GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 
 # Check if required commands are installed
 define CHECK_CMD
@@ -49,7 +50,7 @@ bootstrap: setup
 		--repository=$${GITHUB_REPO} \
 		--personal \
 		--private=false \
-		--branch=feature/structure \
+		--branch=$(GIT_BRANCH) \
 		--path=clusters/$(CLUSTER_NAME)
 	@echo "Waiting for all flux pods to be ready..."
 	kubectl --context "$(KIND_CONTEXT)" -n flux-system wait pod --all \
@@ -72,6 +73,12 @@ wait:
 smoke:
 	@echo "Running smoke checks..."
 	kubectl --context "$(KIND_CONTEXT)" -n flux-system get kustomizations.kustomize.toolkit.fluxcd.io
+	kubectl --context "$(KIND_CONTEXT)" -n homelab wait helmreleases.helm.toolkit.fluxcd.io/podinfo --for=condition=Ready=True --timeout=5m
+	kubectl --context "$(KIND_CONTEXT)" -n homelab rollout status deployment/podinfo --timeout=5m
+	@echo "Checking podinfo via kind gateway on localhost..."
+	curl --fail --silent --show-error \
+		--header 'Host: podinfo.local' \
+		http://127.0.0.1:8080/healthz >/dev/null
 
 e2e: bootstrap reconcile wait smoke
 
