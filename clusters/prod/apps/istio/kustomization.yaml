@@ -4,7 +4,3 @@ resources:
   # - gw-internal.yaml
   # - gw-external.yaml
   - namespace.yaml
-patches:
-  - path: helm-release.yaml
-    target:
-      kind: HelmRelease

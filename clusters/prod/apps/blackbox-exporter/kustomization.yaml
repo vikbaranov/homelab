@@ -3,10 +3,6 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - vmrule.yaml
-patches:
-  - path: helm-release.yaml
-    target:
-      kind: HelmRelease
 configMapGenerator:
   - name: blackbox-exporter-dashboards
     namespace: monitoring

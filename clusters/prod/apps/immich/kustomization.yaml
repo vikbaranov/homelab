@@ -8,7 +8,3 @@ resources:
   - database.yaml
   - immich-http-route.yaml
   - networkpolicy.yaml
-patches:
-  - path: immich-values.yaml
-    target:
-      kind: HelmRelease

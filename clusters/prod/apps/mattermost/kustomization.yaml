@@ -5,7 +5,3 @@ resources:
   - database.yaml
   - networkpolicy.yaml
   - mattermost-http-route.yaml
-patches:
-  - path: mattermost-values.yaml
-    target:
-      kind: HelmRelease

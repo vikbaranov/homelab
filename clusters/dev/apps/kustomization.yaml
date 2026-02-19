@@ -9,3 +9,24 @@ resources:
   - n8n
   - podinfo
   - victoria-metrics
+patches:
+  - path: cert-manager/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cert-manager
+  - path: istio/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: istiod
+  - path: n8n/n8n-values.yaml
+    target:
+      kind: HelmRelease
+      name: n8n
+  - path: podinfo/podinfo-values.yaml
+    target:
+      kind: HelmRelease
+      name: podinfo
+  - path: victoria-metrics/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: vmks

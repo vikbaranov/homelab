@@ -5,7 +5,3 @@ resources:
   - http-route.yaml
   - networkpolicy.yaml
   - pvc.yaml
-patches:
-  - path: path.yaml
-    target:
-      kind: Deployment

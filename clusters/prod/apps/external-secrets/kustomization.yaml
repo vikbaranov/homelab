@@ -6,10 +6,6 @@ resources:
   - namespace.yaml
 generatorOptions:
   disableNameSuffixHash: true
-patches:
-  - path: helm-release.yaml
-    target:
-      kind: HelmRelease
 configMapGenerator:
   - name: external-secrets-dashboards
     namespace: external-secrets

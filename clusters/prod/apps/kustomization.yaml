@@ -27,3 +27,84 @@ resources:
   - victoria-logs
   - victoria-metrics
   - ../misc
+patches:
+  - path: blackbox-exporter/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: blackbox-exporter
+  - path: cert-manager/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cert-manager
+  - path: cilium/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cilium
+  - path: cloudnative-pg/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cloudnative-pg
+  - path: csi-nfs/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: csi-nfs
+  - path: external-dns/helm-release-public.yaml
+    target:
+      kind: HelmRelease
+      name: external-dns
+  - path: external-secrets/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: external-secrets
+  - path: immich/immich-values.yaml
+    target:
+      kind: HelmRelease
+      name: immich
+  - path: istio/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: istiod
+  - path: jellyfin/jellyfin-values.yaml
+    target:
+      kind: HelmRelease
+      name: jellyfin
+  - path: linstor/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: piraeus-operator
+  - path: linstor/git-repos.yaml
+    target:
+      kind: GitRepository
+      name: piraeus
+  - path: mattermost/mattermost-values.yaml
+    target:
+      kind: HelmRelease
+      name: mattermost
+  - path: n8n/n8n-values.yaml
+    target:
+      kind: HelmRelease
+      name: n8n
+  - path: open-webui/open-webui-values.yaml
+    target:
+      kind: HelmRelease
+      name: open-webui
+  - path: podinfo/podinfo-values.yaml
+    target:
+      kind: HelmRelease
+      name: podinfo
+  - path: qbittorrent/path.yaml
+    target:
+      kind: Deployment
+      name: qbittorrent
+  - path: vaultwarden/vaultwarden-values.yaml
+    target:
+      kind: HelmRelease
+      name: vaultwarden
+  - path: victoria-logs/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: vls
+  - path: victoria-metrics/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: vmks

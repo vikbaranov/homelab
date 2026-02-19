@@ -7,7 +7,3 @@ resources:
   - secrets.yaml
   - reference-grant.yaml
   - namespace.yaml
-patches:
-  - path: helm-release.yaml
-    target:
-      kind: HelmRelease

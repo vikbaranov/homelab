@@ -6,10 +6,6 @@ resources:
   - namespace.yaml
 generatorOptions:
   disableNameSuffixHash: true
-patches:
-  - path: helm-release-public.yaml
-    target:
-      kind: HelmRelease
 configMapGenerator:
   - name: external-dns-dashboards
     namespace: external-dns

@@ -3,7 +3,3 @@ kind: Kustomization
 namespace: csi-nfs
 resources:
   - namespace.yaml
-patches:
-  - path: helm-release.yaml
-    target:
-      kind: HelmRelease
