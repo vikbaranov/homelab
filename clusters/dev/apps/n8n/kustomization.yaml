@@ -4,3 +4,7 @@ namespace: homelab
 resources:
   - database.yaml
   - n8n-http-route.yaml
+patches:
+  - path: n8n-values.yaml
+    target:
+      kind: HelmRelease

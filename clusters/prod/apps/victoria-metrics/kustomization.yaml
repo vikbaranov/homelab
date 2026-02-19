@@ -8,3 +8,7 @@ resources:
   - secrets.yaml
   - grafana-http-route.yaml
   - vmsingle-http-route.yaml
+patches:
+  - path: helm-release.yaml
+    target:
+      kind: HelmRelease

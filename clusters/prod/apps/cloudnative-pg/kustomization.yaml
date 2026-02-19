@@ -5,6 +5,10 @@ namespace: cnpg-system
 resources:
   - vmrule.yaml
   - namespace.yaml
+patches:
+  - path: helm-release.yaml
+    target:
+      kind: HelmRelease
 configMapGenerator:
   - name: cnpg-dashboard
     files:

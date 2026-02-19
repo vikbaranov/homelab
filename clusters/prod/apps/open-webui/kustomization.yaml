@@ -3,3 +3,7 @@ kind: Kustomization
 namespace: homelab
 resources:
   - open-webui-http-route.yaml
+patches:
+  - path: open-webui-values.yaml
+    target:
+      kind: HelmRelease

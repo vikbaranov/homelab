@@ -4,3 +4,7 @@ namespace: monitoring
 resources:
   - datasource.yaml
   - victoria-logs-http-route.yaml
+patches:
+  - path: helm-release.yaml
+    target:
+      kind: HelmRelease

@@ -9,6 +9,10 @@ resources:
   - vaultwarden-http-route.yaml
   - networkpolicy.yaml
   - namespace.yaml
+patches:
+  - path: vaultwarden-values.yaml
+    target:
+      kind: HelmRelease
 secretGenerator:
   - name: vaultwarden-values
     files:

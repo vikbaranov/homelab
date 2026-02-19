@@ -6,3 +6,10 @@ resources:
   - linstor-cluster.yaml
   - satelite-config.yaml
   - namespace.yaml
+patches:
+  - path: helm-release.yaml
+    target:
+      kind: HelmRelease
+  - path: git-repos.yaml
+    target:
+      kind: GitRepository

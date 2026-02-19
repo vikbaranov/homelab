@@ -6,3 +6,7 @@ resources:
   - pvc.yaml
   - jellyfin-http-route.yaml
   - networkpolicy.yaml
+patches:
+  - path: jellyfin-values.yaml
+    target:
+      kind: HelmRelease

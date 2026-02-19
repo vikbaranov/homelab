@@ -4,3 +4,7 @@ namespace: kube-system
 resources:
   - pool.yaml
   - hubble-http-route.yaml
+patches:
+  - path: helm-release.yaml
+    target:
+      kind: HelmRelease
