@@ -4,3 +4,4 @@ resources:
   - flux-system
   - crds.yaml
   - bundle.yaml
+  - namespaces.yaml
