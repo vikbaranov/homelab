@@ -20,5 +20,5 @@ resources:
   - ../../base/podinfo
   - ../../base/qbittorrent
   - ../../base/vaultwarden
-patches:
+patchesStrategicMerge:
   - path: prod-stable.yaml
