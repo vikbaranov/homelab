@@ -10,9 +10,6 @@ spec:
   test:
     enable: false
   values:
-    image:
-      repository: jellyfin/jellyfin
-      tag: "10.11.6"
     persistence:
       config:
         enabled: true

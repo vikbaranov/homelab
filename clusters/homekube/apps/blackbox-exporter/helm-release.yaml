@@ -10,8 +10,6 @@ spec:
     - name: "vmks"
       namespace: "monitoring"
   values:
-    image:
-      tag: v0.28.0
     serviceMonitor:
       selfMonitor:
         enabled: true

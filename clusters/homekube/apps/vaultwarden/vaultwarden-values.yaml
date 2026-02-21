@@ -14,8 +14,6 @@ spec:
       name: vaultwarden-values
   values:
     timeZone: "Europe/Moscow"
-    image:
-      tag: 1.35.3
     domain: "https://vaultwarden.${cluster_subdomain}"
     database:
       type: postgresql

@@ -8,9 +8,6 @@ spec:
     spec:
       version: "1.0.x"
   values:
-    image:
-      repository: n8nio/n8n
-      tag: 1.122.4
     main:
       config:
         n8n:
