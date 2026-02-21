@@ -16,7 +16,7 @@ resources:
   - it-tools
   - jellyfin
   - linstor
-  - mattermost
+  # - mattermost
   - misc
   - n8n
   - open-webui
@@ -74,10 +74,10 @@ patches:
     target:
       kind: GitRepository
       name: piraeus
-  - path: mattermost/mattermost-values.yaml
-    target:
-      kind: HelmRelease
-      name: mattermost
+  # - path: mattermost/mattermost-values.yaml
+  #   target:
+  #     kind: HelmRelease
+  #     name: mattermost
   - path: n8n/n8n-values.yaml
     target:
       kind: HelmRelease
