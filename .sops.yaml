@@ -1,12 +1,12 @@
 creation_rules:
-  # Homekube secrets
-  - path_regex: .*homekube/.*values-secret.yaml
+  # Homelab secrets
+  - path_regex: .*homelab/.*values-secret.yaml
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
-  - path_regex: .*homekube/.*secret.json
+  - path_regex: .*homelab/.*secret.json
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
-  - path_regex: .*homekube/.*secret.env
+  - path_regex: .*homelab/.*secret.env
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
-  - path_regex: .*homekube/.*.yaml
+  - path_regex: .*homelab/.*.yaml
     encrypted_regex: ^(data|stringData|value)$
     age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
   # Local secrets

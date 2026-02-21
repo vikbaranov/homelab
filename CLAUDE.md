@@ -56,18 +56,18 @@ This repo is manifest-centric; "tests" are validation and rendering checks.
   - `kustomize build --load-restrictor LoadRestrictionsNone apps/bundles/prod-stable`
 - Render one cluster entrypoint:
   - `kustomize build --load-restrictor LoadRestrictionsNone clusters/local`
-  - `kustomize build --load-restrictor LoadRestrictionsNone clusters/homekube`
+  - `kustomize build --load-restrictor LoadRestrictionsNone clusters/homelab`
 
 ## "Single Test" Equivalents (Targeted Validation)
 
 Use these when you changed only one app/overlay and want fast feedback.
 
 - Validate YAML syntax for one file:
-  - `yq e 'true' clusters/homekube/apps/n8n/kustomization.yaml > /dev/null`
+  - `yq e 'true' clusters/homelab/apps/n8n/kustomization.yaml > /dev/null`
 - Validate one concrete manifest against schemas:
-  - `kubeconform -strict -ignore-missing-schemas -schema-location default -schema-location /tmp/flux-crd-schemas clusters/homekube/apps/n8n/database.yaml`
+  - `kubeconform -strict -ignore-missing-schemas -schema-location default -schema-location /tmp/flux-crd-schemas clusters/homelab/apps/n8n/database.yaml`
 - Validate one overlay end-to-end:
-  - `kustomize build --load-restrictor LoadRestrictionsNone clusters/homekube/apps/n8n | kubeconform -strict -ignore-missing-schemas -schema-location default -schema-location /tmp/flux-crd-schemas -skip Secret`
+  - `kustomize build --load-restrictor LoadRestrictionsNone clusters/homelab/apps/n8n | kubeconform -strict -ignore-missing-schemas -schema-location default -schema-location /tmp/flux-crd-schemas -skip Secret`
 - Validate one base app definition:
   - `kustomize build --load-restrictor LoadRestrictionsNone apps/base/n8n | kubeconform -strict -ignore-missing-schemas -schema-location default -schema-location /tmp/flux-crd-schemas -skip Secret`
 
