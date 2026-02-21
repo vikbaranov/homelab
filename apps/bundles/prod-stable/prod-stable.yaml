@@ -147,17 +147,17 @@ spec:
   chart:
     spec:
       version: ">=1.0.0-alpha"
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: qbittorrent
-spec:
-  template:
-    spec:
-      containers:
-        - name: qbittorrent
-          image: linuxserver/qbittorrent:5.1.4
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: qbittorrent
+# spec:
+#   template:
+#     spec:
+#       containers:
+#         - name: qbittorrent
+#           image: linuxserver/qbittorrent:5.1.4
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease

@@ -6,5 +6,5 @@ resources:
   - ../../base/envoy-gateway
   - ../../base/n8n
   - ../../base/podinfo
-patchesStrategicMerge:
-  - dev-flex.yaml
+patches:
+  - path: dev-flex.yaml
