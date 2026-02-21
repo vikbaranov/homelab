@@ -3,6 +3,11 @@
   "extends": [
     "config:recommended"
   ],
+  "ignorePaths": [
+    "apps/base/mattermost/**",
+    "clusters/homekube/apps/bitwarden-cli/**",
+    "clusters/homekube/apps/n8n/gpt2giga.yaml"
+  ],
   "kubernetes": {
     "managerFilePatterns": [
       "/\\.ya?ml$/"
