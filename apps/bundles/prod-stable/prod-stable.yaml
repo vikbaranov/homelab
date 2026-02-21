@@ -157,7 +157,7 @@ spec:
     spec:
       containers:
         - name: qbittorrent
-          image: linuxserver/qbittorrent:5.1.4 # {"$imagepolicy": "flux-system:qbittorrent"}
+          image: linuxserver/qbittorrent:5.1.4
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease

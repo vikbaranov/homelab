@@ -11,8 +11,8 @@ spec:
       version: "8.12.x"
   values:
     image:
-      repository: ghcr.io/open-webui/open-webui # {"$imagepolicy": "flux-system:open-webui:name"}
-      tag: "v0.8.0" # {"$imagepolicy": "flux-system:open-webui:tag"}
+      repository: ghcr.io/open-webui/open-webui
+      tag: "v0.8.0"
     pipelines:
       enabled: false
     ollama:

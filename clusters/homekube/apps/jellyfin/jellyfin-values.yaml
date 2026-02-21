@@ -11,8 +11,8 @@ spec:
     enable: false
   values:
     image:
-      repository: jellyfin/jellyfin # {"$imagepolicy": "flux-system:jellyfin:name"}
-      tag: "10.11.6" # {"$imagepolicy": "flux-system:jellyfin:tag"}
+      repository: jellyfin/jellyfin
+      tag: "10.11.6"
     persistence:
       config:
         enabled: true

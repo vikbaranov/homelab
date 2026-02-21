@@ -11,7 +11,7 @@ spec:
       namespace: "monitoring"
   values:
     image:
-      tag: v0.28.0 # {"$imagepolicy": "flux-system:blackbox-exporter:tag"}
+      tag: v0.28.0
     serviceMonitor:
       selfMonitor:
         enabled: true

@@ -15,7 +15,7 @@ spec:
   values:
     timeZone: "Europe/Moscow"
     image:
-      tag: 1.35.3 # {"$imagepolicy": "flux-system:vaultwarden:tag"}
+      tag: 1.35.3
     domain: "https://vaultwarden.${cluster_subdomain}"
     database:
       type: postgresql

@@ -6,5 +6,5 @@ spec:
   template:
     spec:
       containers:
-        - image: linuxserver/qbittorrent:5.1.4 # {"$imagepolicy": "flux-system:qbittorrent"}
+        - image: linuxserver/qbittorrent:5.1.4
           name: qbittorrent
