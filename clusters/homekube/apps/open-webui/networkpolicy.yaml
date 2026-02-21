@@ -1,0 +1,16 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: open-webui
+spec:
+  endpointSelector:
+    matchLabels:
+      aapp.kubernetes.io/instance: open-webui
+  egress:
+    - toFQDNs:
+        - matchName: aregistry.ollama.ai
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
