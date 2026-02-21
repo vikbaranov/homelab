@@ -6,7 +6,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.18.0"
+      version: "1.18.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -16,7 +16,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "2.9.1"
+      version: "2.9.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -26,7 +26,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.20.0"
+      version: "0.20.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -36,7 +36,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.19.0"
+      version: "1.19.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -46,7 +46,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "4.12.0"
+      version: "4.12.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -56,7 +56,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.30.0"
+      version: ">= 0.20.0 <= 0.30.0"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -66,7 +66,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.61.0"
+      version: "0.61.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -76,7 +76,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.11.0"
+      version: "0.11.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -86,7 +86,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "11.0.0"
+      version: "11.x.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -96,7 +96,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.19.0"
+      version: "1.19.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -106,7 +106,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.10.0"
+      version: "0.10.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -116,7 +116,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.28.0"
+      version: "1.28.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -126,7 +126,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "2.4.0"
+      version: "2.4.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -136,7 +136,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "6.6.0"
+      version: "6.6.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -146,7 +146,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.0.0"
+      version: "1.0.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -156,7 +156,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "8.12.0"
+      version: "8.12.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -166,18 +166,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.0.0-alpha.0"
-# ---
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: qbittorrent
-# spec:
-#   template:
-#     spec:
-#       containers:
-#         - name: qbittorrent
-#           image: linuxserver/qbittorrent:5.1.4
+      version: ">=1.0.0-alpha"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -187,4 +176,4 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.34.0"
+      version: "0.34.x"

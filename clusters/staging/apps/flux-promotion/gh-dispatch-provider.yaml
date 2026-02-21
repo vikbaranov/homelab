@@ -1,0 +1,10 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: github-dispatch
+  namespace: flux-system
+spec:
+  type: githubdispatch
+  address: https://github.com/vikbaranov/homelab
+  secretRef:
+    name: github-dispatch-token

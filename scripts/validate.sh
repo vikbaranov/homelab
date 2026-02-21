@@ -45,6 +45,15 @@ find . -type f -name '*.yaml' -print0 | while IFS= read -r -d $'\0' file;
     yq e 'true' "$file" > /dev/null
 done
 
+echo "INFO - Validating pinned versions in prod-stable bundle"
+yq -N e 'select(.kind == "HelmRelease") | .metadata.name + "\t" + .spec.chart.spec.version' ./apps/bundles/prod-stable/prod-stable.yaml | \
+  while IFS=$'\t' read -r app version; do
+    if [[ ! "${version}" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z]+)*$ ]]; then
+      echo "error: apps/bundles/prod-stable/prod-stable.yaml contains non-pinned version for ${app}: ${version}" >&2
+      exit 1
+    fi
+  done
+
 echo "INFO - Validating clusters"
 find ./clusters -maxdepth 2 -type f -name '*.yaml' -print0 | while IFS= read -r -d $'\0' file;
   do

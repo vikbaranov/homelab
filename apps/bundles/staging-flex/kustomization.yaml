@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base/cilium
+  - ../../base/linstor
+  - ../../base/external-secrets
+  - ../../base/cert-manager
+  - ../../base/csi-nfs
+  - ../../base/cloudnative-pg
+  - ../../base/envoy-gateway
+  - ../../base/victoria-metrics
+  - ../../base/victoria-logs
+  - ../../base/blackbox-exporter
+  - ../../base/external-dns
+  - ../../base/immich
+  - ../../base/istio
+  - ../../base/it-tools
+  - ../../base/jellyfin
+  - ../../base/mattermost
+  - ../../base/n8n
+  - ../../base/open-webui
+  - ../../base/podinfo
+  - ../../base/qbittorrent
+  - ../../base/vaultwarden
+patches:
+  - path: staging-flex.yaml

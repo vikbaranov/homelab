@@ -1,0 +1,122 @@
+name: promote-flex-to-stable
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: HelmRelease name in prod-stable bundle
+        required: true
+        type: string
+      version:
+        description: Exact semver version to pin in stable bundle
+        required: true
+        type: string
+  repository_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    if: github.event_name != 'repository_dispatch' || github.event.client_payload.action == 'flux-promotion' || github.event.client_payload.metadata.action == 'flux-promotion'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Setup yq
+        uses: fluxcd/pkg/actions/yq@main
+
+      - name: Setup kubeconform
+        uses: fluxcd/pkg/actions/kubeconform@main
+
+      - name: Setup kustomize
+        uses: fluxcd/pkg/actions/kustomize@main
+
+      - name: Resolve promotion parameters
+        id: params
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_APP: ${{ inputs.app }}
+          INPUT_VERSION: ${{ inputs.version }}
+          PAYLOAD: ${{ toJson(github.event.client_payload) }}
+        run: |
+          set -o errexit
+          set -o pipefail
+
+          app="${INPUT_APP}"
+          version="${INPUT_VERSION}"
+
+          if [[ "${EVENT_NAME}" == "repository_dispatch" ]]; then
+            app="$(jq -r '.app // .resource_name // .involvedObject.name // .involvedObject_name // empty' <<<"${PAYLOAD}")"
+            version="$(jq -r '.version // .chart_version // .metadata.promoted_version // empty' <<<"${PAYLOAD}")"
+
+            if [[ -z "${version}" || "${version}" == "null" ]]; then
+              message="$(jq -r '.message // .summary // .reason // empty' <<<"${PAYLOAD}")"
+              version="$(grep -Eo '[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z]+)*' <<<"${message}" | head -n1 || true)"
+            fi
+          fi
+
+          if [[ -z "${app}" || "${app}" == "null" ]]; then
+            echo "error: app is required" >&2
+            exit 1
+          fi
+
+          if [[ -z "${version}" || "${version}" == "null" ]]; then
+            echo "error: version is required" >&2
+            exit 1
+          fi
+
+          if [[ ! "${version}" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z]+)*$ ]]; then
+            echo "error: version must be exact semver (no ranges, no wildcard): ${version}" >&2
+            exit 1
+          fi
+
+          echo "app=${app}" >> "${GITHUB_OUTPUT}"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Verify app exists in stable bundle
+        env:
+          APP: ${{ steps.params.outputs.app }}
+        run: |
+          set -o errexit
+          set -o pipefail
+
+          current="$(yq e 'select(.kind == "HelmRelease" and .metadata.name == strenv(APP)) | .spec.chart.spec.version' apps/bundles/prod-stable/prod-stable.yaml)"
+
+          if [[ -z "${current}" || "${current}" == "null" ]]; then
+            echo "error: ${APP} is not present in apps/bundles/prod-stable/prod-stable.yaml" >&2
+            exit 1
+          fi
+
+      - name: Promote version into stable bundle
+        env:
+          APP: ${{ steps.params.outputs.app }}
+          VERSION: ${{ steps.params.outputs.version }}
+        run: |
+          set -o errexit
+          set -o pipefail
+
+          yq -i 'if .kind == "HelmRelease" and .metadata.name == strenv(APP) then .spec.chart.spec.version = strenv(VERSION) else . end' apps/bundles/prod-stable/prod-stable.yaml
+
+      - name: Validate manifests
+        run: make validate
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: promotion/${{ steps.params.outputs.app }}-${{ steps.params.outputs.version }}
+          commit-message: Promote ${{ steps.params.outputs.app }} to ${{ steps.params.outputs.version }}
+          title: Promote ${{ steps.params.outputs.app }} to ${{ steps.params.outputs.version }}
+          body: |
+            ## Why
+            Promote a validated app version from flex testing into the stable production bundle.
+
+            ## Change
+            - updates `apps/bundles/prod-stable/prod-stable.yaml`
+            - app: `${{ steps.params.outputs.app }}`
+            - pinned version: `${{ steps.params.outputs.version }}`
+
+            ## Validation
+            - `make validate`

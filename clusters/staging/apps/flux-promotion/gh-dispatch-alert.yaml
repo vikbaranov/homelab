@@ -1,0 +1,27 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: flex-bundle-promotion
+  namespace: flux-system
+spec:
+  providerRef:
+    name: github-dispatch
+  eventSeverity: info
+  eventMetadata:
+    action: flux-promotion
+    source_cluster: staging
+    source_bundle: staging-flex
+    target_bundle: prod-stable
+  eventSources:
+    - kind: HelmRelease
+      name: cert-manager
+      namespace: cert-manager
+    - kind: HelmRelease
+      name: cloudnative-pg
+      namespace: cnpg-system
+    - kind: HelmRelease
+      name: n8n
+      namespace: homelab
+    - kind: HelmRelease
+      name: podinfo
+      namespace: homelab
