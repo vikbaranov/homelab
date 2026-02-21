@@ -9,7 +9,7 @@ spec:
       aapp.kubernetes.io/instance: open-webui
   egress:
     - toFQDNs:
-        - matchName: aregistry.ollama.ai
+        - matchName: registry.ollama.ai
       toPorts:
         - ports:
             - port: "443"
