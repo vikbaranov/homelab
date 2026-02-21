@@ -16,7 +16,6 @@ resources:
   - it-tools
   - jellyfin
   - linstor
-  # - mattermost
   - misc
   - n8n
   - open-webui
@@ -26,6 +25,9 @@ resources:
   - victoria-metrics
   - ../misc
 patches:
+  # Example of deleting resources from bundle 
+  - path: mattermost/rm-helm-release.yaml
+  - path: mattermost/rm-helm-repo.yaml
   - path: blackbox-exporter/helm-release.yaml
     target:
       kind: HelmRelease
@@ -74,10 +76,6 @@ patches:
     target:
       kind: GitRepository
       name: piraeus
-  # - path: mattermost/mattermost-values.yaml
-  #   target:
-  #     kind: HelmRelease
-  #     name: mattermost
   - path: n8n/n8n-values.yaml
     target:
       kind: HelmRelease
