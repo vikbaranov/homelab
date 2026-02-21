@@ -18,8 +18,8 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/clusters\\/homekube\\/apps\\/immich\\/immich-values\\.yaml$/"
-      ],
+          "/clusters\\/.+\\-values\\.yaml$/"
+        ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?\\s+tag:\\s*(?<currentValue>\\S+)"
       ]
