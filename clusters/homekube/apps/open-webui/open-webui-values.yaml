@@ -20,6 +20,7 @@ spec:
         models:
           pull:
             - llama3.2:1b
+            - qwen3:1.7b
     persistence:
       enabled: true
       size: 2Gi
