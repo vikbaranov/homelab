@@ -111,12 +111,32 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
+  name: istiod
+  namespace: istio-system
+spec:
+  chart:
+    spec:
+      version: "1.28.x"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
   name: jellyfin
   namespace: homelab
 spec:
   chart:
     spec:
       version: "2.4.x"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mattermost
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "6.6.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease

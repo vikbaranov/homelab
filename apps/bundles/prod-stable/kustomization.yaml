@@ -13,8 +13,10 @@ resources:
   - ../../base/blackbox-exporter
   - ../../base/external-dns
   - ../../base/immich
+  - ../../base/istio
   - ../../base/it-tools
   - ../../base/jellyfin
+  - ../../base/mattermost
   - ../../base/n8n
   - ../../base/open-webui
   - ../../base/podinfo
