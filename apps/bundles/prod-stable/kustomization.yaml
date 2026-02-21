@@ -21,4 +21,4 @@ resources:
   - ../../base/qbittorrent
   - ../../base/vaultwarden
 patchesStrategicMerge:
-  - path: prod-stable.yaml
+  - prod-stable.yaml

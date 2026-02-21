@@ -7,4 +7,4 @@ resources:
   - ../../base/n8n
   - ../../base/podinfo
 patchesStrategicMerge:
-  - path: dev-flex.yaml
+  - dev-flex.yaml
