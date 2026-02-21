@@ -19,7 +19,7 @@ spec:
       ollama:
         models:
           pull:
-            - PetrosStav/gemma3-tools:4b
+            - llama3.2:1b
     persistence:
       enabled: true
       size: 2Gi
