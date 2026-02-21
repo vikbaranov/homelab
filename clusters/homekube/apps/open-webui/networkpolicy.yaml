@@ -8,8 +8,8 @@ spec:
     matchLabels:
       app.kubernetes.io/instance: open-webui
   egress:
-    - toFQDNs:
-        - matchName: registry.ollama.ai
+    - toEntities:
+        - world
       toPorts:
         - ports:
             - port: "443"
