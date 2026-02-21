@@ -14,6 +14,12 @@
       "/\\.ya?ml$/"
     ]
   },
+  "packageRules": [
+    {
+      "matchPackageNames": ["linuxserver/qbittorrent"],
+      "allowedVersions": "/^5\\./"
+    }
+  ],
   "flux": {
     "managerFilePatterns": [
       "/apps/base/.+\\.ya?ml$/",
