@@ -9,7 +9,9 @@ spec:
       version: "1.0.x"
   values:
     image:
-      pullPolicy: Always
+      repository: n8nio/n8n
+      # renovate: datasource=docker depName=n8nio/n8n versioning=semver
+      tag: 1.123.21
     main:
       config:
         n8n:
