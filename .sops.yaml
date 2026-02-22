@@ -17,3 +17,11 @@ creation_rules:
   - path_regex: .*local/.*.yaml
     encrypted_regex: ^(data|stringData|value)$
     age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln
+  # Staging secrets
+  - path_regex: .*staging/.*values-secret.yaml
+    age: age1mtp6p0xvwdf4v2q7fd3cmenkdlwmt3l2xuc5ltkf6lhe9r8lquyqzeehax
+  - path_regex: .*staging/.*secret.env
+    age: age1mtp6p0xvwdf4v2q7fd3cmenkdlwmt3l2xuc5ltkf6lhe9r8lquyqzeehax
+  - path_regex: .*staging/.*.yaml
+    encrypted_regex: ^(data|stringData|value)$
+    age: age1mtp6p0xvwdf4v2q7fd3cmenkdlwmt3l2xuc5ltkf6lhe9r8lquyqzeehax
