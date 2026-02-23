@@ -3,3 +3,8 @@ kind: Kustomization
 resources:
   - ../../../apps/bundles/staging-flex
   - flux-promotion
+patches:
+  - path: cilium/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cilium
