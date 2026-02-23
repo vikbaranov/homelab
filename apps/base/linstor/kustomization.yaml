@@ -3,3 +3,5 @@ kind: Kustomization
 resources:
   - helm-release.yaml
   - git-repos.yaml
+  - linstor-cluster.yaml
+  - satelite-config.yaml

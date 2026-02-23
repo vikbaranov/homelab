@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ../../../apps/bundles/staging-flex
   - flux-promotion
+  - linstor
 patches:
   - path: mattermost/rm-helm-release.yaml
   - path: mattermost/rm-helm-repo.yaml
@@ -10,3 +11,11 @@ patches:
     target:
       kind: HelmRelease
       name: cilium
+  - path: linstor/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: piraeus-operator
+  - path: linstor/git-repos.yaml
+    target:
+      kind: GitRepository
+      name: piraeus
