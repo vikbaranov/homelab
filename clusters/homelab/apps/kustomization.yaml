@@ -25,7 +25,10 @@ resources:
   - victoria-metrics
   - ../misc
 patches:
-  # Example of deleting resources from bundle 
+  # delete istio's gateways 
+  - path: istio/rm-gw-internal.yaml
+  - path: istio/rm-gw-external.yaml
+  # delete mattermost 
   - path: mattermost/rm-helm-release.yaml
   - path: mattermost/rm-helm-repo.yaml
   - path: blackbox-exporter/helm-release.yaml
