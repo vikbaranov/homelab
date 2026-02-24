@@ -1,0 +1,26 @@
+# SOPS-encrypted files — auto-encrypt on `git add`, auto-decrypt on `git checkout`
+# The filter and diff drivers must be configured locally (not committed to git):
+#
+#   git config filter.sops.clean  "sops --encrypt --filename-override=%f /dev/stdin"
+#   git config filter.sops.smudge "sops --decrypt /dev/stdin"
+#   git config filter.sops.required true
+#   git config diff.sops.textconv "sops --decrypt"
+#
+# Run `make git-sops-setup` to apply all four lines at once.
+
+clusters/staging/**/secrets.yaml         filter=sops diff=sops merge=sops -text
+clusters/staging/**/*-secret.yaml        filter=sops diff=sops merge=sops -text
+clusters/staging/**/*secret.env          filter=sops diff=sops merge=sops -text
+clusters/staging/**/*values-secret.yaml  filter=sops diff=sops merge=sops -text
+
+clusters/homelab/**/secrets.yaml         filter=sops diff=sops merge=sops -text
+clusters/homelab/**/*-secret.yaml        filter=sops diff=sops merge=sops -text
+clusters/homelab/**/*secret.env          filter=sops diff=sops merge=sops -text
+clusters/homelab/**/*secret.enc.env      filter=sops diff=sops merge=sops -text
+clusters/homelab/**/*values-secret.yaml  filter=sops diff=sops merge=sops -text
+clusters/homelab/**/*values-secret.enc.yaml filter=sops diff=sops merge=sops -text
+
+clusters/local/**/secrets.yaml           filter=sops diff=sops merge=sops -text
+clusters/local/**/*-secret.yaml          filter=sops diff=sops merge=sops -text
+clusters/local/**/*secret.env            filter=sops diff=sops merge=sops -text
+clusters/local/**/*values-secret.yaml    filter=sops diff=sops merge=sops -text

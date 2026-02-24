@@ -82,5 +82,12 @@ smoke:
 
 e2e: bootstrap reconcile wait smoke
 
+git-sops-setup:
+	@git config filter.sops.clean  "scripts/sops-clean.sh %f"
+	@git config filter.sops.smudge "sops --decrypt /dev/stdin"
+	@git config filter.sops.required true
+	@git config diff.sops.textconv "sops --decrypt"
+	@echo "INFO - SOPS git filter and diff driver configured for this repo"
+
 clean:
 	@kind delete cluster --name "$(CLUSTER_NAME)"
