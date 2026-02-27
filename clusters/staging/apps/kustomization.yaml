@@ -41,3 +41,7 @@ patches:
     target:
       kind: HelmRelease
       name: vaultwarden
+  - path: cert-manager/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cert-manager
