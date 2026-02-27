@@ -9,5 +9,6 @@ spec:
     name: letsencrypt-prod
   commonName: "sleepfox.ru"
   dnsNames:
+  - "sleepfox.ru"
   - "*.${cluster_subdomain}"
   - "${cluster_subdomain}"
