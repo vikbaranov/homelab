@@ -19,7 +19,13 @@ spec:
       namespace: cert-manager
     - kind: HelmRelease
       name: "*"
+      namespace: csi-nfs
+    - kind: HelmRelease
+      name: "*"
       namespace: external-secrets
+    - kind: HelmRelease
+      name: "*"
+      namespace: external-dns
     - kind: HelmRelease
       name: "*"
       namespace: cnpg-system
@@ -31,9 +37,15 @@ spec:
       namespace: homelab
     - kind: HelmRelease
       name: "*"
-      namespace: vaultwarden
+      namespace: istio-system
     - kind: HelmRelease
       name: "*"
       namespace: linstor
+    - kind: HelmRelease
+      name: "*"
+      namespace: monitoring
+    - kind: HelmRelease
+      name: "*"
+      namespace: vaultwarden
   inclusionList:
     - ".*.upgrade.*succeeded.*"
