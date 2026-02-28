@@ -6,6 +6,7 @@ resources:
   - envoy-gateway
   - flux-promotion
   - immich
+  - jellyfin
   - linstor
   - n8n
   - open-webui
@@ -38,6 +39,10 @@ patches:
     target:
       kind: Deployment
       name: qbittorrent
+  - path: jellyfin/jellyfin-values.yaml
+    target:
+      kind: HelmRelease
+      name: jellyfin
   - path: open-webui/open-webui-values.yaml
     target:
       kind: HelmRelease
