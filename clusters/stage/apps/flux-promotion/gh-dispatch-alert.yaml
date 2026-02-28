@@ -8,38 +8,32 @@ spec:
     name: github-dispatch
   eventSeverity: info
   eventMetadata:
-    action: flux-promotion
-    source_cluster: stage
-    source_bundle: stage-flex
-    target_bundle: prod-stable
+    env: stage
+    type: prod
   eventSources:
     - kind: HelmRelease
-      name: cilium
+      name: "*"
       namespace: kube-system
     - kind: HelmRelease
-      name: cert-manager
+      name: "*"
       namespace: cert-manager
     - kind: HelmRelease
-      name: external-secrets
+      name: "*"
       namespace: external-secrets
     - kind: HelmRelease
-      name: cloudnative-pg
+      name: "*"
       namespace: cnpg-system
     - kind: HelmRelease
-      name: envoy-gateway
+      name: "*"
       namespace: envoy-gateway-system
     - kind: HelmRelease
-      name: n8n
+      name: "*"
       namespace: homelab
     - kind: HelmRelease
-      name: podinfo
-      namespace: homelab
-    - kind: HelmRelease
-      name: immich
-      namespace: homelab
-    - kind: HelmRelease
-      name: vaultwarden
+      name: "*"
       namespace: vaultwarden
     - kind: HelmRelease
-      name: piraeus-operator
+      name: "*"
       namespace: linstor
+  inclusionList:
+    - ".*.upgrade.*succeeded.*"
