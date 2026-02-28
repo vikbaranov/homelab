@@ -1,0 +1,42 @@
+name: e2e
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+
+      - name: Setup Kubernetes Kind
+        uses: helm/kind-action@main
+        with:
+          cluster_name: local
+          config: kind-config.yaml
+
+      - name: Write sops age key
+        run: |
+          mkdir -p clusters/local
+          echo "${{ secrets.SOPS_AGE_KEY }}" > clusters/local/sops.agekey
+
+      - name: Run e2e
+        run: |
+          make ci-e2e \
+            GIT_URL=${{ github.server_url }}/${{ github.repository }} \
+            GIT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}
+
+      - name: Debug on failure
+        if: failure()
+        run: |
+          flux get all -A
+          flux logs -A
+          kubectl -n flux-system get kustomizations -o yaml

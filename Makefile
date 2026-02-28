@@ -75,12 +75,58 @@ smoke:
 	kubectl --context "$(KIND_CONTEXT)" -n flux-system get kustomizations.kustomize.toolkit.fluxcd.io
 	kubectl --context "$(KIND_CONTEXT)" -n homelab wait helmreleases.helm.toolkit.fluxcd.io/podinfo --for=condition=Ready=True --timeout=5m
 	kubectl --context "$(KIND_CONTEXT)" -n homelab rollout status deployment/podinfo --timeout=5m
-	@echo "Checking podinfo via kind gateway on localhost..."
+	@echo "Checking podinfo..."
 	curl --fail --silent --show-error \
 		--header 'Host: podinfo.local' \
-		http://127.0.0.1:8080/healthz >/dev/null
+		http://127.0.0.1:8080/healthz
 
 e2e: bootstrap reconcile wait smoke
+
+GIT_URL ?=
+
+ci-bootstrap: setup
+	@echo "Creating sops-age secret..."
+	@if [[ ! -e "$(SOPS_AGE_KEY)" ]]; then \
+		echo "error: Age private key does not exist at $(SOPS_AGE_KEY)." >&2; \
+		exit 1; \
+	fi
+	kubectl --context "$(KIND_CONTEXT)" create namespace flux-system --dry-run=client -o yaml | kubectl --context "$(KIND_CONTEXT)" apply -f -
+	kubectl --context "$(KIND_CONTEXT)" create secret generic sops-age \
+		--namespace=flux-system \
+		--from-file=sops.agekey="$(SOPS_AGE_KEY)" \
+		--dry-run=client -o yaml | kubectl --context "$(KIND_CONTEXT)" apply -f -
+	@echo "Installing Flux controllers..."
+	flux install
+	@echo "Creating namespaces..."
+	kubectl --context "$(KIND_CONTEXT)" apply -f clusters/$(CLUSTER_NAME)/namespaces.yaml
+	@echo "Creating git source..."
+	flux --context "$(KIND_CONTEXT)" create source git flux-system \
+		--url=$(GIT_URL) \
+		--branch=$(GIT_BRANCH)
+	@echo "Applying Flux kustomizations..."
+	kubectl --context "$(KIND_CONTEXT)" apply -f clusters/$(CLUSTER_NAME)/crds.yaml
+	kubectl --context "$(KIND_CONTEXT)" apply -f clusters/$(CLUSTER_NAME)/bundle.yaml
+
+ci-wait:
+	@echo "Waiting for CRDs kustomization to become Ready..."
+	kubectl --context "$(KIND_CONTEXT)" -n flux-system wait kustomizations.kustomize.toolkit.fluxcd.io/crds --for=condition=Ready=True --timeout=2m
+	@echo "Waiting for bundle kustomization to become Ready..."
+	kubectl --context "$(KIND_CONTEXT)" -n flux-system wait kustomizations.kustomize.toolkit.fluxcd.io/bundle --for=condition=Ready=True --timeout=2m
+	@echo "Waiting for HelmReleases to appear..."
+	@for i in $$(seq 1 60); do \
+		count=$$(kubectl --context "$(KIND_CONTEXT)" get helmreleases -A --no-headers 2>/dev/null | wc -l); \
+		if [[ "$$count" -gt 0 ]]; then \
+			echo "Found $$count HelmRelease(s), waiting for Ready..."; \
+			break; \
+		fi; \
+		echo "  attempt $$i/60..."; \
+		sleep 5; \
+	done
+	kubectl --context "$(KIND_CONTEXT)" wait helmrelease --all --all-namespaces --for=condition=Ready=True --timeout=5m
+	@echo "Waiting for all pods to be Ready..."
+	kubectl --context "$(KIND_CONTEXT)" wait pod --all --all-namespaces --for=condition=Ready --timeout=5m
+
+ci-e2e: ci-bootstrap ci-wait smoke
 
 git-sops-setup:
 	@git config filter.sops.clean  "scripts/sops-clean.sh %f"
