@@ -4,9 +4,6 @@ metadata:
   name: immich
   namespace: homelab
 spec:
-  chart:
-    spec:
-      version: "0.10.x"
   values:
     controllers:
       main:

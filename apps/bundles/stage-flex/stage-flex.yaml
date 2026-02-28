@@ -6,7 +6,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.19.x"
+      version: "1.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -16,7 +16,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "2.9.x"
+      version: "2.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -26,7 +26,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.20.x"
+      version: "0.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -36,7 +36,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.19.x"
+      version: "1.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -46,7 +46,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "4.12.x"
+      version: "4.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -56,7 +56,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: ">= 0.20.0 <= 0.30.0"
+      version: "0.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -66,7 +66,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.61.x"
+      version: "0.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -76,7 +76,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.11.x"
+      version: "0.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -86,7 +86,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "11.x.x"
+      version: "11.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -96,7 +96,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.19.x"
+      version: "1.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -106,7 +106,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.10.x"
+      version: "0.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -116,7 +116,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.28.x"
+      version: "1.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -126,7 +126,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "2.4.x"
+      version: "2.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -136,7 +136,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "6.6.x"
+      version: "6.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -146,7 +146,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "1.0.x"
+      version: "1.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -156,7 +156,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "8.12.x"
+      version: "8.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -166,7 +166,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "6.9.x"
+      version: "6.x"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -176,4 +176,4 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.34.x"
+      version: "0.x"

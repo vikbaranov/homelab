@@ -3,9 +3,6 @@ kind: HelmRelease
 metadata:
   name: cert-manager
 spec:
-  chart:
-    spec:
-      version: "1.19.x"
   values:
     extraArgs:
       - --dns01-recursive-nameservers-only

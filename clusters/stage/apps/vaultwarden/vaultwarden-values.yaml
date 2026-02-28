@@ -4,9 +4,6 @@ metadata:
   name: vaultwarden
   namespace: vaultwarden
 spec:
-  chart:
-    spec:
-      version: "0.34.x"
   test:
     enable: false
   valuesFrom: []
