@@ -78,7 +78,7 @@ smoke:
 	@echo "Checking podinfo..."
 	curl --fail --silent --show-error \
 		--header 'Host: podinfo.local' \
-		http://127.0.0.1:8080/healthz >/dev/null
+		http://127.0.0.1:8080/healthz
 
 e2e: bootstrap reconcile wait smoke
 
