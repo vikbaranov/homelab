@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: monitoring
 resources:
   # - grafana-dashboardDefinitions.yaml
-  - helm-repo.yaml
   - secrets.yaml
   - grafana-http-route.yaml
   - vmsingle-http-route.yaml
