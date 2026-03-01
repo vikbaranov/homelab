@@ -7,8 +7,6 @@ spec:
   values:
     controllers:
       main:
-        podSecurityContext:
-          fsGroup: 1000
         containers:
           main:
             image:
@@ -56,6 +54,12 @@ spec:
       persistence:
         tmp:
           type: emptyDir
+    server:
+      controllers:
+        main:
+          pod:
+            securityContext:
+              fsGroup: 1000
     valkey:
       enabled: true
       controllers:
