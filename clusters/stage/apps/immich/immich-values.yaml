@@ -21,6 +21,7 @@ spec:
                   secretKeyRef:
                     name: immich-db-superuser
                     key: uri
+              DB_SKIP_MIGRATIONS: "true"
             securityContext:
               capabilities:
                 drop:
