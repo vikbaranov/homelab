@@ -4,9 +4,6 @@ metadata:
   name: mattermost
   namespace: homelab
 spec:
-  chart:
-    spec:
-      version: "6.6.x"
   test:
     enable: false
   values:

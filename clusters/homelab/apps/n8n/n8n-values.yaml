@@ -4,9 +4,6 @@ metadata:
   name: n8n
   namespace: homelab
 spec:
-  chart:
-    spec:
-      version: "1.0.x"
   values:
     image:
       repository: n8nio/n8n

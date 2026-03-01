@@ -4,9 +4,6 @@ metadata:
   name: vmks
   namespace: monitoring
 spec:
-  chart:
-    spec:
-      version: "*"
   values:
     global:
       clusterLabel: local
