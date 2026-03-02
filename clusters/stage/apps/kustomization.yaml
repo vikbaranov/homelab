@@ -18,6 +18,8 @@ patches:
   - path: victoria-metrics/rm-helm-repo.yaml
   - path: open-webui/rm-helm-release.yaml
   - path: open-webui/rm-helm-repo.yaml
+  - path: victoria-logs/rm-helm-release.yaml
+  - path: blackbox-exporter/rm-helm-release.yaml
   - path: cilium/helm-release.yaml
     target:
       kind: HelmRelease
