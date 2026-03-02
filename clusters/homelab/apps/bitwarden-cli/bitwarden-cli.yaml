@@ -40,16 +40,12 @@ spec:
               containerPort: 8087
               protocol: TCP
           livenessProbe:
-            exec:
-              command:
-                - wget
-                - -q
-                - http://127.0.0.1:8087/sync?force=true
-                - --post-data=''
+            tcpSocket:
+              port: 8087
             initialDelaySeconds: 20
-            failureThreshold: 3
-            timeoutSeconds: 120
-            periodSeconds: 300
+            failureThreshold: 5
+            timeoutSeconds: 1
+            periodSeconds: 30
           readinessProbe:
             tcpSocket:
               port: 8087
@@ -69,6 +65,33 @@ spec:
               mountPath: /home/bitwarden/.bitwarden
             - name: tmp
               mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+        - name: sync
+          image: busybox:1.37
+          command:
+            - /bin/sh
+            - -c
+            - |
+              sleep 60
+              while true; do
+                wget -q -O /dev/null http://127.0.0.1:8087/sync?force=true --post-data='' || true
+                sleep 300
+              done
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 32Mi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
