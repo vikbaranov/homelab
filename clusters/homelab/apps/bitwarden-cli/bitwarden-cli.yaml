@@ -83,7 +83,7 @@ spec:
               sleep 60
               while true; do
                 wget -q -O /dev/null http://127.0.0.1:8087/sync?force=true --post-data='' || true
-                sleep 300
+                sleep 60
               done
           resources:
             requests:
