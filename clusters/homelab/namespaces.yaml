@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: arc-runners
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
 ---
 apiVersion: v1
 kind: Namespace
@@ -58,7 +60,6 @@ kind: Namespace
 metadata:
   name: linstor
   labels:
-    # needs for victoria logs, node-exporter
     pod-security.kubernetes.io/enforce: privileged
 ---
 apiVersion: v1
@@ -66,7 +67,6 @@ kind: Namespace
 metadata:
   name: monitoring
   labels:
-    # needs for victoria logs, node-exporter
     pod-security.kubernetes.io/enforce: privileged
 ---
 apiVersion: v1
