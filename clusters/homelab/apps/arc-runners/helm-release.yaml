@@ -1,0 +1,11 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: arc-runner-set
+  namespace: arc-runners
+spec:
+  values:
+    githubConfigSecret: pre-defined-secret
+    githubConfigUrl: "https://github.com/v1kbaranov"
+    containerMode:
+      type: "dind"
