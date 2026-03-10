@@ -46,7 +46,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: cleaner
-              image: alpine/k8s:1.35.1
+              image: alpine/k8s:1.35.2
               imagePullPolicy: IfNotPresent
               command:
                 - /bin/sh
