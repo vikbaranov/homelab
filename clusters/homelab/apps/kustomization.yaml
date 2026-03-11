@@ -28,10 +28,10 @@ resources:
   - flux
   - ../misc
 patches:
-  # delete istio's gateways 
+  # delete istio's gateways
   - path: istio/rm-gw-internal.yaml
   - path: istio/rm-gw-external.yaml
-  # delete mattermost 
+  # delete mattermost
   - path: mattermost/rm-helm-release.yaml
   - path: mattermost/rm-helm-repo.yaml
   - path: arc-runners/helm-release.yaml

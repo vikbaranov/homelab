@@ -74,7 +74,7 @@ Three VMs on Proxmox VE running [Talos Linux](https://www.talos.dev) as the Kube
 │       └── prod-stable         # Exact pins — only explicitly approved versions
 ├── clusters
 │   ├── local                   # Local Kind cluster for development and testing
-│   │   └── …                  
+│   │   └── …
 │   ├── stage                   # Staging Talos cluster
 │   │   ├── apps
 │   │   │   ├── kustomization.yaml   # Includes stage-flex bundle + cluster overlays
