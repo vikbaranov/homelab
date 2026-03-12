@@ -6,9 +6,10 @@ metadata:
 spec:
   interval: 15m
   values:
-    installNoConntrackIptablesRules: false
+    installNoConntrackIptablesRules: true
     bpf:
-      masquerade: false
+      masquerade: true
+      hostLegacyRouting: true
     cni:
       exclusive: true
     nodePort:
@@ -19,7 +20,6 @@ spec:
         enabled: true
     dashboards:
       enabled: true
-    enableIPv4BIGTCP: true
     hubble:
       enabled: true
       relay:
@@ -60,11 +60,11 @@ spec:
     ipv4NativeRoutingCIDR: 10.244.0.0/16
     l2announcements:
       enabled: true
-      leaseDuration: 3s
-      leaseRenewDeadline: 1s
-      leaseRetryPeriod: 200ms
+      leaseDuration: 15s
+      leaseRenewDeadline: 5s
+      leaseRetryPeriod: 2s
     loadBalancer:
-      mode: hybrid
+      mode: dsr
       algorithm: maglev
       acceleration: best-effort
       serviceTopology: true
