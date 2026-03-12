@@ -7,7 +7,7 @@ spec:
   interval: 15m
   values:
     bpf:
-      masquerade: true
+      masquerade: false
       hostLegacyRouting: true
     routingMode: native
     autoDirectNodeRoutes: true
