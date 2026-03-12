@@ -1,17 +1,11 @@
+# See https://artifacthub.io/packages/helm/cilium/cilium
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: cilium
 spec:
+  interval: 15m
   values:
-    installNoConntrackIptablesRules: true
-    bpf:
-      masquerade: true
-      hostLegacyRouting: true
-    cni:
-      exclusive: true
-    nodePort:
-      enabled: true
     hubble:
       enabled: true
       relay:
@@ -21,7 +15,10 @@ spec:
     ipam:
       mode: kubernetes
     kubeProxyReplacement: true
-    localRedirectPolicy: false
+    externalIPs:
+      enabled: true
+    nodePort:
+      enabled: true
     securityContext:
       capabilities:
         ciliumAgent:
@@ -46,20 +43,17 @@ spec:
         enabled: false
     k8sServiceHost: localhost
     k8sServicePort: 7445
-    routingMode: native
-    autoDirectNodeRoutes: true
-    ipv4NativeRoutingCIDR: 10.244.0.0/16
+    loadBalancer:
+      algorithm: maglev
+      serviceTopology: true
     l2announcements:
       enabled: true
       leaseDuration: 15s
       leaseRenewDeadline: 5s
       leaseRetryPeriod: 2s
-    loadBalancer:
-      mode: dsr
-      algorithm: maglev
-      acceleration: best-effort
-      serviceTopology: true
-    operator:
-      replicas: 1
     envoy:
       enabled: false
+    rollOutCiliumPods: true
+    operator:
+      rollOutPods: true
+      replicas: 1
