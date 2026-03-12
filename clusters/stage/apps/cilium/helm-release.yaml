@@ -6,12 +6,6 @@ metadata:
 spec:
   interval: 15m
   values:
-    bpf:
-      masquerade: false
-      hostLegacyRouting: true
-    routingMode: native
-    autoDirectNodeRoutes: true
-    ipv4NativeRoutingCIDR: 10.244.0.0/16
     hubble:
       enabled: true
       relay:
