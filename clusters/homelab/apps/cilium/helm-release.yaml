@@ -43,8 +43,6 @@ spec:
         enabled: false
     k8sServiceHost: localhost
     k8sServicePort: 7445
-    bpf:
-      hostLegacyRouting: true
     loadBalancer:
       algorithm: maglev
       serviceTopology: true
