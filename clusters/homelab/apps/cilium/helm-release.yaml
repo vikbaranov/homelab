@@ -6,20 +6,18 @@ metadata:
 spec:
   interval: 15m
   values:
+    kubeProxyReplacement: true
+    policyEnforcementMode: never
+    k8sServiceHost: localhost
+    k8sServicePort: 6443
+    ipam:
+      mode: kubernetes
     hubble:
       enabled: true
       relay:
         enabled: true
       ui:
         enabled: true
-    ipam:
-      mode: kubernetes
-    kubeProxyReplacement: true
-    policyEnforcementMode: never
-    externalIPs:
-      enabled: true
-    nodePort:
-      enabled: true
     securityContext:
       capabilities:
         ciliumAgent:
@@ -39,22 +37,17 @@ spec:
           - SYS_ADMIN
           - SYS_RESOURCE
     cgroup:
-      hostRoot: /sys/fs/cgroup
       autoMount:
         enabled: false
-    k8sServiceHost: localhost
-    k8sServicePort: 7445
-    loadBalancer:
-      algorithm: maglev
-      serviceTopology: true
+      hostRoot: /sys/fs/cgroup
+    operator:
+      rollOutPods: true
+      replicas: 1
+    envoy:
+      enabled: false
+    l7Proxy: false
     l2announcements:
       enabled: true
       leaseDuration: 15s
       leaseRenewDeadline: 5s
       leaseRetryPeriod: 2s
-    envoy:
-      enabled: false
-    rollOutCiliumPods: true
-    operator:
-      rollOutPods: true
-      replicas: 1
