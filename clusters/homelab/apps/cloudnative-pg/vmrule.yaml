@@ -1,0 +1,23 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vmrule-cloudnative-pg
+  namespace: monitoring
+spec:
+  groups:
+    - name: CloudnativePG
+      rules:
+        - alert: BlackboxProbeFailed
+          expr: "probe_success == 0"
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Blackbox probe failed (instance {{ $labels.instance }})
+        - alert: CNPGBackupStale
+          expr: time() - avg by (pod)(cnpg_collector_last_available_backup_timestamp) > 86400
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL backup stale on {{ $labels.pod }}"

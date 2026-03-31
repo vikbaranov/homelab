@@ -1,0 +1,27 @@
+creation_rules:
+  # Homelab secrets
+  - path_regex: .*homelab/.*values-secret.yaml
+    age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
+  - path_regex: .*homelab/.*secret.json
+    age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
+  - path_regex: .*homelab/.*secret.env
+    age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
+  - path_regex: .*homelab/.*.yaml
+    encrypted_regex: ^(data|stringData|value)$
+    age: age1e0wp4sq3nsdgnaqf97mqzssffj66mtu9jpvmv23f5m927xkjvufsate277
+  # Local secrets
+  - path_regex: .*local/.*values-secret.yaml
+    age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln
+  - path_regex: .*local/.*secret.env
+    age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln
+  - path_regex: .*local/.*.yaml
+    encrypted_regex: ^(data|stringData|value)$
+    age: age12fr7rv0m09slmt906xzpyh7e3aqw0es82yzvt0m8tzuv5dzj7vcsc9vvln
+  # stage secrets
+  - path_regex: .*stage/.*values-secret.yaml
+    age: age1mtp6p0xvwdf4v2q7fd3cmenkdlwmt3l2xuc5ltkf6lhe9r8lquyqzeehax
+  - path_regex: .*stage/.*secret.env
+    age: age1mtp6p0xvwdf4v2q7fd3cmenkdlwmt3l2xuc5ltkf6lhe9r8lquyqzeehax
+  - path_regex: .*stage/.*.yaml
+    encrypted_regex: ^(data|stringData|value)$
+    age: age1mtp6p0xvwdf4v2q7fd3cmenkdlwmt3l2xuc5ltkf6lhe9r8lquyqzeehax

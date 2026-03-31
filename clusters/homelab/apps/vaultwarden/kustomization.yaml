@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: vaultwarden
+resources:
+  - vmprobe.yaml
+  - database.yaml
+  - vaultwarden-http-route.yaml
+secretGenerator:
+  - name: vaultwarden-values
+    files:
+      - values.yaml=values-secret.enc.yaml
+  - name: database-backup-s3
+    envs:
+      - s3.secret.enc.env
+configurations:
+  - kustomizeconfig.yaml

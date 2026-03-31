@@ -1,0 +1,45 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: local-nodeport
+  namespace: envoy-gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              type: NodePort
+              ports:
+                - name: http
+                  port: 80
+                  protocol: TCP
+                  nodePort: 30080
+                - name: https
+                  port: 443
+                  protocol: TCP
+                  nodePort: 30443
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: internal
+  namespace: envoy-gateway-system
+spec:
+  gatewayClassName: eg
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: local-nodeport
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: "*.${cluster_subdomain}"
+      allowedRoutes:
+        namespaces:
+          from: All

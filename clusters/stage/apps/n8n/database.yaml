@@ -1,0 +1,23 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: n8n-db
+  namespace: homelab
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.2
+  instances: 1
+  storage:
+    size: 1Gi
+    storageClass: local
+  bootstrap:
+    initdb:
+      database: n8n
+  postgresql:
+    parameters:
+      shared_buffers: "64MB"
+  resources:
+    requests:
+      memory: "512Mi"
+    limits:
+      memory: "512Mi"

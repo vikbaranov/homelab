@@ -1,0 +1,57 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-db
+  namespace: homelab
+spec:
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.3
+  enableSuperuserAccess: true
+  monitoring:
+    enablePodMonitor: true
+  postgresql:
+    shared_preload_libraries:
+      - "vchord.so"
+  backup:
+    retentionPolicy: "7d"
+    barmanObjectStore:
+      destinationPath: "s3://pg-backups"
+      endpointURL: https://s3.cloud.ru
+      s3Credentials:
+        accessKeyId:
+          name: database-backup-s3
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: database-backup-s3
+          key: ACCESS_SECRET_KEY
+        region:
+          name: database-backup-s3
+          key: REGION
+      data:
+        compression: bzip2
+      wal:
+        compression: bzip2
+  instances: 1
+  storage:
+    size: 2Gi
+    storageClass: local
+  bootstrap:
+    initdb:
+      database: immich
+      postInitSQL:
+        - CREATE EXTENSION IF NOT EXISTS "vector";
+        - CREATE EXTENSION IF NOT EXISTS "vchord" CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: immich-daily-backup
+  namespace: homelab
+spec:
+  immediate: true
+  schedule: "0 0 1 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: immich-db

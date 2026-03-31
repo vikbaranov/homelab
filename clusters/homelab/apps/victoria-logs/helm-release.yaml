@@ -1,0 +1,28 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vls
+spec:
+  driftDetection:
+    mode: enabled
+  dependsOn:
+    - name: "vmks"
+      namespace: "monitoring"
+  values:
+    server:
+      persistentVolume:
+        enabled: true
+        size: 2Gi
+        storageClassName: "local"
+      retentionDiskSpaceUsage: 1.5GiB
+      vmServiceScrape:
+        enabled: true
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+    vector:
+      enabled: true
+    dashboards:
+      enabled: true
+      labels:
+        grafana_dashboard: "1"

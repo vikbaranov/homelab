@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vmks
+  namespace: monitoring
+spec:
+  values:
+    global:
+      clusterLabel: local
+    vmsingle:
+      ingress:
+        enabled: true
+        hosts:
+          - "vmsingle.local"
+    vmalert:
+      ingress:
+        enabled: true
+        hosts:
+          - "vmalert.local"
+    vmagent:
+      ingress:
+        enabled: true
+        hosts:
+          - "vmagent.local"
+    grafana:
+      adminPassword: admin
+      ingress:
+        enabled: true
+        hosts:
+          - grafana.local

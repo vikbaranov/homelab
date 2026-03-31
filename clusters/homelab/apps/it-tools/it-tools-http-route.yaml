@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: it-tools
+  namespace: homelab
+spec:
+  parentRefs:
+    - name: external
+      namespace: envoy-gateway-system
+    - name: internal
+      namespace: envoy-gateway-system
+  hostnames:
+    - it-tools.${cluster_subdomain}
+  rules:
+    - backendRefs:
+        - name: it-tools
+          port: 8080

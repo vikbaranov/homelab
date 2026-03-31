@@ -1,0 +1,119 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../../apps/bundles/prod-stable
+  - arc-controller
+  - linstor
+  - arc-runners
+  - bitwarden-cli
+  - blackbox-exporter
+  - cert-manager
+  - cilium
+  - cloudnative-pg
+  - csi-nfs
+  - envoy-gateway
+  - external-dns
+  - external-secrets
+  - immich
+  - istio
+  - it-tools
+  - jellyfin
+  - misc
+  - n8n
+  - open-webui
+  - qbittorrent
+  - vaultwarden
+  - victoria-logs
+  - victoria-metrics
+  - flux
+  - ../misc
+patches:
+  # delete istio's gateways
+  - path: istio/rm-gw-internal.yaml
+  - path: istio/rm-gw-external.yaml
+  - path: istio/rm-helm-release.yaml
+  # victoria-logs
+  - path: victoria-logs/rm-helm-release.yaml
+  - path: victoria-logs/rm-http-route.yaml
+  # delete mattermost
+  - path: mattermost/rm-helm-release.yaml
+  - path: mattermost/rm-helm-repo.yaml
+  # delete open-webui
+  - path: open-webui/rm-helm-release.yaml
+  - path: open-webui/rm-http-route.yaml
+  # delete csi-nfs
+  - path: csi-nfs/rm-helm-release.yaml
+  - path: csi-nfs/rm-helm-repo.yaml
+
+  - path: arc-runners/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: arc-runner-set
+  - path: blackbox-exporter/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: blackbox-exporter
+  - path: cert-manager/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cert-manager
+  - path: cilium/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cilium
+  - path: csi-nfs/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: csi-nfs
+  - path: external-dns/helm-release-public.yaml
+    target:
+      kind: HelmRelease
+      name: external-dns
+  - path: external-secrets/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: external-secrets
+  - path: immich/immich-values.yaml
+    target:
+      kind: HelmRelease
+      name: immich
+  - path: istio/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: istiod
+  - path: jellyfin/jellyfin-values.yaml
+    target:
+      kind: HelmRelease
+      name: jellyfin
+  - path: linstor/helm-release-cluster.yaml
+    target:
+      kind: HelmRelease
+      name: linstor-cluster
+  - path: n8n/n8n-values.yaml
+    target:
+      kind: HelmRelease
+      name: n8n
+  - path: open-webui/open-webui-values.yaml
+    target:
+      kind: HelmRelease
+      name: open-webui
+  - path: podinfo/podinfo-values.yaml
+    target:
+      kind: HelmRelease
+      name: podinfo
+  - path: qbittorrent/path.yaml
+    target:
+      kind: Deployment
+      name: qbittorrent
+  - path: vaultwarden/vaultwarden-values.yaml
+    target:
+      kind: HelmRelease
+      name: vaultwarden
+  - path: victoria-logs/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: vls
+  - path: victoria-metrics/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: vmks

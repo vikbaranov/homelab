@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "ignorePaths": [
+    "apps/base/mattermost/**",
+    "clusters/homelab/apps/bitwarden-cli/**",
+    "clusters/homelab/apps/n8n/gpt2giga.yaml",
+    "clusters/**/flux-system/**"
+  ],
+  "kubernetes": {
+    "managerFilePatterns": [
+      "/\\.ya?ml$/"
+    ]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+          "/clusters\\/.+\\-values\\.yaml$/"
+        ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?\\s+tag:\\s*(?<currentValue>\\S+)"
+      ]
+    }
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["linuxserver/qbittorrent"],
+      "allowedVersions": "/^5\\./"
+    }
+  ],
+  "flux": {
+    "managerFilePatterns": [
+      "/apps/base/.+\\.ya?ml$/",
+      "/apps/bundles/.+\\.ya?ml$/",
+      "/clusters/.+\\.ya?ml$/"
+    ]
+  }
+}

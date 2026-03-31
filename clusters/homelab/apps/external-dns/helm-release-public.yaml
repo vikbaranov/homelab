@@ -1,0 +1,29 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns-public
+  namespace: external-dns
+spec:
+  releaseName: external-dns-public
+  chart:
+    spec:
+      chart: external-dns
+      version: "1.19.x"
+  values:
+    sources:
+      - service
+    domainFilters:
+      - sleepfox.ru
+    annotationFilter: "external-dns.alpha.kubernetes.io/enabled=true"
+    policy: sync
+    provider:
+      name: cloudflare
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-api-token
+            key: cloudflare-api-token
+    serviceMonitor:
+      enabled: true

@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-ingress
+spec:
+  secretName: wildcard-ingress-tls-secret
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  commonName: "*.${cluster_subdomain}"
+  dnsNames:
+  - "*.${cluster_subdomain}"

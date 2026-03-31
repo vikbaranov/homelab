@@ -1,0 +1,19 @@
+$patch: delete
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+  namespace: homelab
+spec:
+  releaseName: open-webui
+  chart:
+    spec:
+      chart: open-webui
+      sourceRef:
+        kind: HelmRepository
+        name: open-webui
+        namespace: homelab
+  interval: 15m
+  install:
+    remediation:
+      retries: 3

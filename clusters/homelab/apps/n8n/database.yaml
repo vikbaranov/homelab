@@ -1,0 +1,53 @@
+  apiVersion: postgresql.cnpg.io/v1
+  kind: Cluster
+  metadata:
+    name: n8n-db
+  spec:
+    imageName: ghcr.io/cloudnative-pg/postgresql:17.2
+    monitoring:
+      enablePodMonitor: true
+    backup:
+      retentionPolicy: "7d"
+      barmanObjectStore:
+        destinationPath: "s3://pg-backups"
+        endpointURL: https://s3.cloud.ru
+        s3Credentials:
+          accessKeyId:
+            name: database-backup-s3
+            key: ACCESS_KEY_ID
+          secretAccessKey:
+            name: database-backup-s3
+            key: ACCESS_SECRET_KEY
+          region:
+            name: database-backup-s3
+            key: REGION
+        data:
+          compression: bzip2
+        wal:
+          compression: bzip2
+    instances: 1
+    bootstrap:
+      initdb:
+        database: n8n
+    postgresql:
+      parameters:
+        shared_buffers: "64MB"
+    resources:
+      requests:
+        memory: "512Mi"
+      limits:
+        memory: "512Mi"
+    storage:
+      size: 1Gi
+      storageClass: local
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: n8n-daily-backup
+spec:
+  immediate: true
+  schedule: "0 0 1 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: n8n-db

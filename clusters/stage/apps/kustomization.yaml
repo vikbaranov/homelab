@@ -1,0 +1,58 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../../apps/bundles/stage-flex
+  - cert-manager
+  - envoy-gateway
+  - immich
+  - jellyfin
+  - n8n
+  - qbittorrent
+  - vaultwarden
+  - flux
+patches:
+  - path: mattermost/rm-helm-release.yaml
+  - path: mattermost/rm-helm-repo.yaml
+  - path: victoria-metrics/rm-helm-release.yaml
+  - path: victoria-metrics/rm-helm-repo.yaml
+  - path: open-webui/rm-helm-release.yaml
+  - path: open-webui/rm-helm-repo.yaml
+  - path: victoria-logs/rm-helm-release.yaml
+  - path: blackbox-exporter/rm-helm-release.yaml
+  - path: istio/rm-helm-release.yaml
+  - path: cilium/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cilium
+  - path: immich/immich-values.yaml
+    target:
+      kind: HelmRelease
+      name: immich
+  - path: linstor/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: piraeus-operator
+  - path: linstor/helm-release-cluster.yaml
+    target:
+      kind: HelmRelease
+      name: linstor-cluster
+  - path: n8n/n8n-values.yaml
+    target:
+      kind: HelmRelease
+      name: n8n
+  - path: qbittorrent/downloads-patch.yaml
+    target:
+      kind: Deployment
+      name: qbittorrent
+  - path: jellyfin/jellyfin-values.yaml
+    target:
+      kind: HelmRelease
+      name: jellyfin
+  - path: vaultwarden/vaultwarden-values.yaml
+    target:
+      kind: HelmRelease
+      name: vaultwarden
+  - path: cert-manager/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: cert-manager

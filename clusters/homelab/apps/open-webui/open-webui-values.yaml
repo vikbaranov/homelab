@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+  namespace: homelab
+spec:
+  releaseName: open-webui
+  interval: 15m
+  chart:
+    spec:
+      version: "8.12.x"
+  values:
+    pipelines:
+      enabled: false
+    ollama:
+      ollama:
+        models:
+          pull:
+            - "llama3.2:1b"
+            - "tomng/nanbeige4.1:3b"
+    persistence:
+      enabled: true
+      size: 2Gi
+      storageClass: "local"

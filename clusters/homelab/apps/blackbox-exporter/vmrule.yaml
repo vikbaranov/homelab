@@ -1,0 +1,17 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vmrule-blackbox-exporter
+  namespace: monitoring
+spec:
+  groups:
+
+    - name: BlackboxExporter
+      rules:
+        - alert: BlackboxProbeFailed
+          expr: "probe_success == 0"
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Blackbox probe failed (instance {{ $labels.instance }})

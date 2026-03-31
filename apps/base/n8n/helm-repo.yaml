@@ -1,0 +1,10 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: 8gears
+  namespace: homelab
+spec:
+  interval: 120m
+  type: oci
+  url: oci://8gears.container-registry.com/library

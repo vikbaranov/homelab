@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../../apps/bundles/dev-flex
+  - envoy-gateway
+  - n8n
+  - podinfo
+patches:
+  - path: n8n/n8n-values.yaml
+    target:
+      kind: HelmRelease
+      name: n8n
+  - path: podinfo/podinfo-values.yaml
+    target:
+      kind: HelmRelease
+      name: podinfo
+  - path: victoria-metrics/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: vmks

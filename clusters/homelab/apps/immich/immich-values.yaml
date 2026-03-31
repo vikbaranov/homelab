@@ -1,0 +1,55 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+  namespace: homelab
+spec:
+  test:
+    enable: false
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              # renovate: datasource=docker depName=ghcr.io/immich-app/immich-server versioning=semver
+              tag: v2.6.2
+            env:
+              REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
+              IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
+              DB_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-db-app
+                    key: uri
+            securityContext:
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false
+              seccompProfile:
+                type: RuntimeDefault
+    immich:
+      persistence:
+        library:
+          existingClaim: immich-data
+    machine-learning:
+      persistence:
+        tmp:
+          type: emptyDir
+    valkey:
+      enabled: true
+      controllers:
+        main:
+          containers:
+            main:
+      persistence:
+        data:
+          enabled: true
+          size: 1Gi
+          type: emptyDir
+          accessMode: ReadWriteOnce

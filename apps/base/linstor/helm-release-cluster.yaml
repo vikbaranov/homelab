@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: linstor-cluster
+  namespace: linstor
+spec:
+  interval: 15m
+  timeout: 3m
+  dependsOn:
+    - name: piraeus-operator
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  chart:
+    spec:
+      chart: linstor-cluster
+      sourceRef:
+        kind: HelmRepository
+        name: piraeus-charts
+        namespace: linstor

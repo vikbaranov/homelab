@@ -1,0 +1,51 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: flex-bundle-promotion
+  namespace: flux-system
+spec:
+  providerRef:
+    name: github-dispatch
+  eventSeverity: info
+  eventMetadata:
+    env: stage
+    type: prod
+  eventSources:
+    - kind: HelmRelease
+      name: "*"
+      namespace: kube-system
+    - kind: HelmRelease
+      name: "*"
+      namespace: cert-manager
+    - kind: HelmRelease
+      name: "*"
+      namespace: csi-nfs
+    - kind: HelmRelease
+      name: "*"
+      namespace: external-secrets
+    - kind: HelmRelease
+      name: "*"
+      namespace: external-dns
+    - kind: HelmRelease
+      name: "*"
+      namespace: cnpg-system
+    - kind: HelmRelease
+      name: "*"
+      namespace: envoy-gateway-system
+    - kind: HelmRelease
+      name: "*"
+      namespace: homelab
+    - kind: HelmRelease
+      name: "*"
+      namespace: istio-system
+    - kind: HelmRelease
+      name: "*"
+      namespace: linstor
+    - kind: HelmRelease
+      name: "*"
+      namespace: monitoring
+    - kind: HelmRelease
+      name: "*"
+      namespace: vaultwarden
+  inclusionList:
+    - ".*.upgrade.*succeeded.*"

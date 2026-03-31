@@ -1,0 +1,15 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: istiod
+  namespace: istio-system
+spec:
+  values:
+    profile: ambient
+    meshConfig:
+      outboundTrafficPolicy:
+        mode: REGISTRY_ONLY
+      accessLogFile: /dev/stdout
+    env:
+      PILOT_ENABLE_ALPHA_GATEWAY_API: "true"

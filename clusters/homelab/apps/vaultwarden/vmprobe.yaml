@@ -1,0 +1,15 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMProbe
+metadata:
+  name: vaultwarden-probe
+spec:
+  jobName: vaultwarden-probe
+  vmProberSpec:
+    scheme: https
+    url: http://blackbox-exporter-prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
+  module: http_2xx
+  targets:
+   staticConfig:
+      targets:
+      -  https://vaultwarden.sleepfox.ru
+  interval: 1m

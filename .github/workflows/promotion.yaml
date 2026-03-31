@@ -1,0 +1,115 @@
+name: promote-flex-to-stable
+
+on:
+  repository_dispatch:
+    types:
+      - HelmRelease/**
+  workflow_dispatch:
+    inputs:
+      app:
+        description: HelmRelease name in prod-stable bundle
+        required: true
+        type: string
+      namespace:
+        description: HelmRelease namespace
+        required: true
+        type: string
+      version:
+        description: Exact semver version to pin in stable bundle
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.client_payload.metadata.env == 'stage' &&
+       github.event.client_payload.severity == 'info')
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Setup yq
+        uses: fluxcd/pkg/actions/yq@main
+
+      - name: Setup kubeconform
+        uses: fluxcd/pkg/actions/kubeconform@main
+
+      - name: Setup kustomize
+        uses: fluxcd/pkg/actions/kustomize@main
+
+      - name: Get chart version from stage
+        id: staging
+        run: |
+          set -o errexit
+          set -o pipefail
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "helmrelease=${{ inputs.app }}" >> "${GITHUB_OUTPUT}"
+            echo "namespace=${{ inputs.namespace }}" >> "${GITHUB_OUTPUT}"
+            echo "version=${{ inputs.version }}" >> "${GITHUB_OUTPUT}"
+            echo "type=prod" >> "${GITHUB_OUTPUT}"
+          else
+            HELMRELEASE="${{ github.event.client_payload.involvedObject.name }}"
+            NAMESPACE="${{ github.event.client_payload.involvedObject.namespace }}"
+            VERSION="$(echo '${{ github.event.client_payload.metadata.revision }}' | cut -d '@' -f1)"
+            TYPE="${{ github.event.client_payload.metadata.type }}"
+            echo "helmrelease=${HELMRELEASE}" >> "${GITHUB_OUTPUT}"
+            echo "namespace=${NAMESPACE}" >> "${GITHUB_OUTPUT}"
+            echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+            echo "type=${TYPE}" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Promote version into stable bundle
+        id: production
+        env:
+          HELM_RELEASE: ${{ steps.staging.outputs.helmrelease }}
+          NAMESPACE: ${{ steps.staging.outputs.namespace }}
+          VERSION: ${{ steps.staging.outputs.version }}
+          TYPE: ${{ steps.staging.outputs.type }}
+        run: |
+          set -o errexit
+          set -o pipefail
+
+          bundle="apps/bundles/${TYPE}-stable/${TYPE}-stable.yaml"
+
+          curv="$(yq '. | select(.metadata.name == env(HELM_RELEASE) and .metadata.namespace == env(NAMESPACE)) | .spec.chart.spec.version' "${bundle}")"
+
+          if [[ -z "${curv}" || "${curv}" == "null" ]]; then
+            echo "error: ${NAMESPACE}/${HELM_RELEASE} not found in ${bundle}" >&2
+            exit 1
+          fi
+
+          echo "Current version: ${curv}"
+          echo "    New version: ${VERSION}"
+
+          if [[ "${VERSION}" != "${curv}" ]]; then
+            yq -i '(. | select(.metadata.name == env(HELM_RELEASE) and .metadata.namespace == env(NAMESPACE)) | .spec.chart.spec.version) = env(VERSION)' "${bundle}"
+            echo "changes=true" >> "${GITHUB_OUTPUT}"
+            echo "curv=${curv}" >> "${GITHUB_OUTPUT}"
+          else
+            echo "Version already at ${VERSION}, no changes needed"
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        if: steps.production.outputs.changes == 'true'
+        with:
+          branch: promotion/${{ steps.staging.outputs.helmrelease }}-${{ steps.staging.outputs.version }}
+          delete-branch: true
+          commit-message: "Promote ${{ steps.staging.outputs.namespace }}/${{ steps.staging.outputs.helmrelease }} to ${{ steps.staging.outputs.version }}"
+          title: "Promote ${{ steps.staging.outputs.namespace }}/${{ steps.staging.outputs.helmrelease }} to ${{ steps.staging.outputs.version }}"
+          body: |
+            ## Why
+            HelmRelease `${{ steps.staging.outputs.namespace }}/${{ steps.staging.outputs.helmrelease }}` was upgraded from `${{ steps.production.outputs.curv }}` to `${{ steps.staging.outputs.version }}` in stage-flex.
+            Promote to ${{ steps.staging.outputs.type }}-stable.
+
+            ## Change
+            - updates `apps/bundles/${{ steps.staging.outputs.type }}-stable/${{ steps.staging.outputs.type }}-stable.yaml`

@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: piraeus-charts
+  namespace: linstor
+spec:
+  interval: 120m
+  type: oci
+  url: oci://ghcr.io/piraeusdatastore/helm-charts

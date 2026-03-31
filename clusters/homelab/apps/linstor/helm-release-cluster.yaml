@@ -1,0 +1,84 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: linstor-cluster
+  namespace: linstor
+spec:
+  values:
+    linstorSatelliteConfigurations:
+      - name: talos-loader-override
+        podTemplate:
+          spec:
+            initContainers:
+              - name: drbd-shutdown-guard
+                $patch: delete
+              - name: drbd-module-loader
+                $patch: delete
+            volumes:
+              - name: run-systemd-system
+                $patch: delete
+              - name: run-drbd-shutdown-guard
+                $patch: delete
+              - name: systemd-bus-socket
+                $patch: delete
+              - name: lib-modules
+                $patch: delete
+              - name: usr-src
+                $patch: delete
+              - name: etc-lvm-backup
+                hostPath:
+                  path: /var/etc/lvm/backup
+                  type: DirectoryOrCreate
+              - name: etc-lvm-archive
+                hostPath:
+                  path: /var/etc/lvm/archive
+                  type: DirectoryOrCreate
+        storagePools:
+          - name: data
+            lvmPool:
+              volumeGroup: data
+            source:
+              hostDevices:
+                - /dev/sdb
+      - name: p-talos-01-nfs
+        nodeSelector:
+          kubernetes.io/hostname: p-talos-01
+        storagePools:
+          - name: nfs-data
+            lvmPool:
+              volumeGroup: nfs-data
+            source:
+              hostDevices:
+                - /dev/sdc
+    storageClasses:
+      - name: local
+        annotations:
+          storageclass.kubernetes.io/is-default-class: "true"
+        parameters:
+          linstor.csi.linbit.com/storagePool: "data"
+          linstor.csi.linbit.com/layerList: "storage"
+          linstor.csi.linbit.com/allowRemoteVolumeAccess: "false"
+        volumeBindingMode: WaitForFirstConsumer
+      - name: replicated
+        parameters:
+          linstor.csi.linbit.com/storagePool: "data"
+          linstor.csi.linbit.com/autoPlace: "3"
+          linstor.csi.linbit.com/layerList: "drbd storage"
+          linstor.csi.linbit.com/allowRemoteVolumeAccess: "true"
+          property.linstor.csi.linbit.com/DrbdOptions/auto-quorum: suspend-io
+          property.linstor.csi.linbit.com/DrbdOptions/Resource/on-no-data-accessible: suspend-io
+          property.linstor.csi.linbit.com/DrbdOptions/Resource/on-suspended-primary-outdated: force-secondary
+          property.linstor.csi.linbit.com/DrbdOptions/Net/rr-conflict: retry-connect
+        volumeBindingMode: Immediate
+      - name: nfs
+        parameters:
+          linstor.csi.linbit.com/storagePool: "nfs-data"
+          linstor.csi.linbit.com/allowRemoteVolumeAccess: "true"
+          linstor.csi.linbit.com/autoPlace: "1"
+          property.linstor.csi.linbit.com/DrbdOptions/auto-quorum: suspend-io
+          property.linstor.csi.linbit.com/DrbdOptions/Resource/on-no-data-accessible: suspend-io
+        volumeBindingMode: Immediate
+    monitoring:
+      enabled: true
+      dashboard:
+        enabled: true

@@ -1,0 +1,47 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: vaultwarden-db
+  namespace: vaultwarden
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.2
+  instances: 1
+  storage:
+    size: 2Gi
+    storageClass: local
+  bootstrap:
+    initdb:
+      database: vaultwarden
+  monitoring:
+    enablePodMonitor: true
+  backup:
+    retentionPolicy: "7d"
+    barmanObjectStore:
+      destinationPath: "s3://pg-backups"
+      endpointURL: https://s3.cloud.ru
+      s3Credentials:
+        accessKeyId:
+          name: database-backup-s3
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: database-backup-s3
+          key: ACCESS_SECRET_KEY
+        region:
+          name: database-backup-s3
+          key: REGION
+      data:
+        compression: bzip2
+      wal:
+        compression: bzip2
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: vaultwarden-daily-backup
+  namespace: vaultwarden
+spec:
+  immediate: true
+  schedule: "0 0 1 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: vaultwarden-db
