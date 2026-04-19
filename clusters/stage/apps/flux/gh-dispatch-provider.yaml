@@ -5,6 +5,6 @@ metadata:
   namespace: flux-system
 spec:
   type: githubdispatch
-  address: https://github.com/vikbaranov/homelab
+  address: https://github.com/v1kbaranov/homelab
   secretRef:
     name: github-dispatch-token

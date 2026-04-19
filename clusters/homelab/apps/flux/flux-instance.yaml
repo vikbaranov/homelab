@@ -19,7 +19,7 @@ spec:
     domain: cluster.local
   sync:
     kind: GitRepository
-    url: "https://github.com/vikbaranov/homelab.git"
+    url: "https://github.com/v1kbaranov/homelab.git"
     ref: "refs/heads/main"
     path: "clusters/homelab"
     pullSecret: "github"
