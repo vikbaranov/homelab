@@ -14,7 +14,7 @@ spec:
             image:
               repository: ghcr.io/immich-app/immich-server
               # renovate: datasource=docker depName=ghcr.io/immich-app/immich-server versioning=semver
-              tag: v2.6.2
+              tag: v2.7.5
             env:
               REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
               IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
