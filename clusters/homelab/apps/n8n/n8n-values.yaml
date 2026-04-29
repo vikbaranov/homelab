@@ -8,7 +8,7 @@ spec:
     image:
       repository: n8nio/n8n
       # renovate: datasource=docker depName=n8nio/n8n versioning=semver
-      tag: 2.17.2
+      tag: 2.19.1
     main:
       config:
         n8n:
