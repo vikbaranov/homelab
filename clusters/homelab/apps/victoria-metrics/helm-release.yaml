@@ -108,6 +108,17 @@ spec:
     alertmanager:
       useManagedConfig: true
       spec:
+        extraEnvs:
+          - name: HTTP_PROXY
+            valueFrom:
+              secretKeyRef:
+                name: telegram-token
+                key: proxy-url
+          - name: HTTPS_PROXY
+            valueFrom:
+              secretKeyRef:
+                name: telegram-token
+                key: proxy-url
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
