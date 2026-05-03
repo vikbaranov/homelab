@@ -99,6 +99,10 @@ patches:
     target:
       kind: HelmRelease
       name: open-webui
+  - path: goldpinger/goldpinger-values.yaml
+    target:
+      kind: HelmRelease
+      name: goldpinger
   - path: podinfo/podinfo-values.yaml
     target:
       kind: HelmRelease

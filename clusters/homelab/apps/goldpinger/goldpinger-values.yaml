@@ -1,0 +1,13 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: goldpinger
+  namespace: monitoring
+spec:
+  values:
+    goldpinger:
+      udp:
+        enabled: true
+    extraEnv:
+      - name: HOSTS_TO_RESOLVE
+        value: "ya.ru"
