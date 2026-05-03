@@ -11,3 +11,5 @@ spec:
     extraEnv:
       - name: HOSTS_TO_RESOLVE
         value: "ya.ru"
+    serviceMonitor:
+      enabled: true
