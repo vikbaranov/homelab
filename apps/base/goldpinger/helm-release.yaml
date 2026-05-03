@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: goldpinger
+  namespace: monitoring
+spec:
+  releaseName: goldpinger
+  chart:
+    spec:
+      chart: goldpinger
+      sourceRef:
+        kind: HelmRepository
+        name: goldpinger
+        namespace: monitoring
+  interval: 5m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  # Default values
+  # https://github.com/bloomberg/goldpinger/blob/master/charts/goldpinger/values.yaml
