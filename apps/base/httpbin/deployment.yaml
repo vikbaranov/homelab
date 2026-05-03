@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+  template:
+    metadata:
+      labels:
+        app: httpbin
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: httpbin
+          image: ghcr.io/mccutchen/go-httpbin:2.22.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ['ALL']
+          resources:
+            requests:
+              cpu: '25m'
+              memory: '32Mi'
+            limits:
+              cpu: '100m'
+              memory: '128Mi'
+          livenessProbe:
+            httpGet:
+              path: /status/200
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /status/200
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 3

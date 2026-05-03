@@ -15,6 +15,7 @@ resources:
   - ../../base/blackbox-exporter
   - ../../base/external-dns
   - ../../base/immich
+  - ../../base/httpbin
   - ../../base/istio
   - ../../base/it-tools
   - ../../base/jellyfin
