@@ -5,8 +5,6 @@ metadata:
   namespace: homelab
 spec:
   parentRefs:
-    - name: external
-      namespace: envoy-gateway-system
     - name: internal
       namespace: envoy-gateway-system
   hostnames:

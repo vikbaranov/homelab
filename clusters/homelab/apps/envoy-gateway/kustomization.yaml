@@ -4,7 +4,6 @@ namespace: envoy-gateway-system
 resources:
   - gw-class.yaml
   - gw-internal.yaml
-  - gw-external.yaml
   - vm-podscrape.yaml
 configMapGenerator:
   - name: envoy-gateway-dashboards
