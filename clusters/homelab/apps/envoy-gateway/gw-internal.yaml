@@ -1,4 +1,15 @@
 ---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: internal-daemonset
+  namespace: envoy-gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDaemonSet: {}
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -9,6 +20,10 @@ spec:
   infrastructure:
     annotations:
       lbipam.cilium.io/ips: 192.168.100.15
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: internal-daemonset
   listeners:
     - name: http
       protocol: HTTP
