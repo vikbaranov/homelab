@@ -9,9 +9,6 @@ data:
   config.toml: |
     workspace_dir = "/zeroclaw-data/workspace"
     config_path = "/zeroclaw-data/.zeroclaw/config.toml"
-    default_provider = "anthropic"
-    default_model = "claude-sonnet-4-20250514"
-    default_temperature = 0.7
 
     [gateway]
     port = 42617
@@ -20,6 +17,19 @@ data:
     require_pairing = true
     web_dist_dir = "/usr/share/zeroclawlabs/web/dist"
 
-    [autonomy]
-    level = "supervised"
-    auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations"]
+    [channels.telegram]
+    enabled = true
+    bot_token = "${TELEGRAM_BOT_TOKEN}"
+    allowed_users = [843816777]
+    use_long_polling = true
+
+    [agent]
+    max_tool_iterations = 30
+    parallel_tools = true
+
+    [providers]
+    fallback = "https://foundation-models.api.cloud.ru/v1"
+
+    [providers.models."https://foundation-models.api.cloud.ru/v1"]
+    model = "Qwen/Qwen3-235B-A22B-Instruct-2507"
+    api_key = "${OPENAI_API_KEY}"

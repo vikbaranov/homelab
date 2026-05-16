@@ -21,6 +21,47 @@ spec:
         runAsGroup: 65534
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+      initContainers:
+        - name: init-config
+          image: alpine:3.22
+          command:
+            - sh
+            - -ec
+            - |
+              apk add --no-cache gettext >/dev/null
+              mkdir -p /zeroclaw-data/.zeroclaw /zeroclaw-data/workspace
+              if [ ! -f /zeroclaw-data/.zeroclaw/config.toml ]; then
+                envsubst < /config/config.toml > /zeroclaw-data/.zeroclaw/config.toml
+              fi
+              chmod 600 /zeroclaw-data/.zeroclaw/config.toml
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zeroclaw-api-key
+                  key: openai-api-key
+            - name: TELEGRAM_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: zeroclaw-api-key
+                  key: telegram-bot-token
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: data
+              mountPath: /zeroclaw-data
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
       containers:
         - name: zeroclaw
           image: ghcr.io/zeroclaw-labs/zeroclaw:v0.7.5
@@ -45,14 +86,8 @@ spec:
             - name: ZEROCLAW_GATEWAY_PORT
               value: "42617"
           volumeMounts:
-            - name: state
-              mountPath: /zeroclaw-data/.zeroclaw
-            - name: config
-              mountPath: /zeroclaw-data/.zeroclaw/config.toml
-              subPath: config.toml
-              readOnly: true
-            - name: workspace
-              mountPath: /zeroclaw-data/workspace
+            - name: data
+              mountPath: /zeroclaw-data
             - name: tmp
               mountPath: /tmp
           resources:
@@ -89,9 +124,7 @@ spec:
         - name: config
           configMap:
             name: zeroclaw-config
-        - name: state
-          emptyDir: {}
-        - name: workspace
+        - name: data
           emptyDir: {}
         - name: tmp
           emptyDir: {}

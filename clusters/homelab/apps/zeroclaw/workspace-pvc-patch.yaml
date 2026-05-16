@@ -1,6 +1,6 @@
 - op: replace
-  path: /spec/template/spec/volumes/2
+  path: /spec/template/spec/volumes/1
   value:
-    name: workspace
+    name: data
     persistentVolumeClaim:
       claimName: zeroclaw-workspace
