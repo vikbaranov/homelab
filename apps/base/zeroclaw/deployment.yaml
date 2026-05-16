@@ -33,6 +33,7 @@ spec:
               if [ ! -f /zeroclaw-data/.zeroclaw/config.toml ]; then
                 envsubst < /config/config.toml > /zeroclaw-data/.zeroclaw/config.toml
               fi
+              chown -R 65534:65534 /zeroclaw-data
               chmod 600 /zeroclaw-data/.zeroclaw/config.toml
           env:
             - name: OPENAI_API_KEY
