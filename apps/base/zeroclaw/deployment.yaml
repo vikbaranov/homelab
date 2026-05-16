@@ -23,7 +23,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: init-config
-          image: alpine:3.22
+          image: alpine:3.23
           command:
             - sh
             - -ec
