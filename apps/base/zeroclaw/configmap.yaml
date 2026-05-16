@@ -20,7 +20,7 @@ data:
     [channels.telegram]
     enabled = true
     bot_token = "${TELEGRAM_BOT_TOKEN}"
-    allowed_users = [843816777]
+    allowed_users = ["843816777"]
     use_long_polling = true
 
     [agent]
