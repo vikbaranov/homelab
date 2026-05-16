@@ -25,6 +25,7 @@ resources:
   - open-webui
   - qbittorrent
   - vaultwarden
+  - zeroclaw
   - victoria-logs
   - victoria-metrics
   - flux

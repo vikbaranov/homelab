@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zeroclaw
+spec:
+  template:
+    spec:
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: zeroclaw-workspace

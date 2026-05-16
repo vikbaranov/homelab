@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: homelab
+resources:
+  - pvc.yaml
+  - secrets.yaml
+  - zeroclaw-http-route.yaml
+patches:
+  - path: workspace-pvc-patch.yaml
+    target:
+      kind: Deployment
+      name: zeroclaw

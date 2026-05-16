@@ -27,5 +27,6 @@ resources:
   - ../../base/qbittorrent
   - ../../base/vaultwarden
   - ../../base/metrics-server
+  - ../../base/zeroclaw
 patches:
   - path: prod-stable.yaml

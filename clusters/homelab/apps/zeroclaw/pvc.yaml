@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zeroclaw-workspace
+  labels:
+    app.kubernetes.io/name: zeroclaw
+    app.kubernetes.io/part-of: zeroclaw
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local
+  volumeMode: Filesystem
