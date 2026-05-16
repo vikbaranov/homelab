@@ -7,5 +7,6 @@ spec:
     spec:
       volumes:
         - name: workspace
+          $patch: replace
           persistentVolumeClaim:
             claimName: zeroclaw-workspace
