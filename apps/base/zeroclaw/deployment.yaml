@@ -16,6 +16,11 @@ spec:
         app.kubernetes.io/name: zeroclaw
         app.kubernetes.io/part-of: zeroclaw
     spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: zeroclaw
           image: ghcr.io/zeroclaw-labs/zeroclaw:v0.7.5
