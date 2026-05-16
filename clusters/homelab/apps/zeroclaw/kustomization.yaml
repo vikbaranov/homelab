@@ -5,8 +5,3 @@ resources:
   - pvc.yaml
   - secrets.yaml
   - zeroclaw-http-route.yaml
-patches:
-  - path: workspace-pvc-patch.yaml
-    target:
-      kind: Deployment
-      name: zeroclaw
