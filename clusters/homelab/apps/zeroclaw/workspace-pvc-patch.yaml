@@ -1,12 +1,6 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: zeroclaw
-spec:
-  template:
-    spec:
-      volumes:
-        - name: workspace
-          $patch: replace
-          persistentVolumeClaim:
-            claimName: zeroclaw-workspace
+- op: replace
+  path: /spec/template/spec/volumes/2
+  value:
+    name: workspace
+    persistentVolumeClaim:
+      claimName: zeroclaw-workspace
