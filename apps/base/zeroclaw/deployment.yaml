@@ -72,7 +72,7 @@ spec:
               type: RuntimeDefault
       containers:
         - name: zeroclaw
-          image: gghcr.io/zeroclaw-labs/zeroclaw:debian
+          image: ghcr.io/zeroclaw-labs/zeroclaw:debian
           imagePullPolicy: IfNotPresent
           args: ["daemon"]
           ports:
