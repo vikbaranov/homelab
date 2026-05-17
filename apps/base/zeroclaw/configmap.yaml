@@ -28,8 +28,8 @@ data:
     parallel_tools = true
 
     [providers]
-    fallback = "https://foundation-models.api.cloud.ru/v1"
+    fallback = "custom:https://foundation-models.api.cloud.ru/v1"
 
-    [providers.models."https://foundation-models.api.cloud.ru/v1"]
+    [providers.models."custom:https://foundation-models.api.cloud.ru/v1"]
     model = "Qwen/Qwen3-235B-A22B-Instruct-2507"
     api_key = "${OPENAI_API_KEY}"
