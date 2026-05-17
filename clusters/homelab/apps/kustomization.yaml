@@ -116,9 +116,9 @@ patches:
     target:
       kind: HelmRelease
       name: vaultwarden
-  - path: zeroclaw/workspace-pvc-patch.yaml
+  - path: zeroclaw/helm-release.yaml
     target:
-      kind: Deployment
+      kind: HelmRelease
       name: zeroclaw
   - path: victoria-logs/helm-release.yaml
     target:

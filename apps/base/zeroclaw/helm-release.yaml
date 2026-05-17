@@ -1,0 +1,21 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: zeroclaw
+  namespace: homelab
+spec:
+  releaseName: zeroclaw
+  chart:
+    spec:
+      chart: zeroclaw
+      sourceRef:
+        kind: HelmRepository
+        name: zeroclaw
+        namespace: homelab
+  interval: 5m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3

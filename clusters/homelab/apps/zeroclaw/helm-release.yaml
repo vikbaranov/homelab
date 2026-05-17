@@ -1,0 +1,79 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: zeroclaw
+  namespace: homelab
+spec:
+  values:
+    image:
+      tag: debian
+
+    secret:
+      create: false
+      existingSecret: zeroclaw
+      existingSecretKey: openai-api-key
+
+    channelSecrets:
+      existingSecret: zeroclaw
+      secretKeys:
+        telegramBotToken: telegram-bot-token
+
+    persistence:
+      enabled: true
+      existingClaim: zeroclaw-workspace
+
+    service:
+      port: 42617
+      targetPort: 42617
+
+    config:
+      mode: daemon
+      provider: custom:https://foundation-models.api.cloud.ru/v1
+      model: Qwen/Qwen3-235B-A22B-Instruct-2507
+      allowPublicBind: true
+      requirePairing: true
+      agent:
+        maxToolIterations: 30
+        parallelTools: true
+      channels:
+        telegram:
+          enabled: true
+          allowedUsers:
+            - "843816777"
+      extraConfig: |
+        [proxy]
+        enabled = true
+        no_proxy = [".sleepfox.ru", "127.0.0.1", "localhost", "sleepfox.ru"]
+        scope = "services"
+        services = ["channel.telegram"]
+
+    extraEnv:
+      - name: LANG
+        value: C.UTF-8
+      - name: HOME
+        value: /zeroclaw-data
+      - name: ZEROCLAW_WORKSPACE
+        value: /zeroclaw-data/workspace
+      - name: HTTPS_PROXY
+        valueFrom:
+          secretKeyRef:
+            name: zeroclaw
+            key: https_proxy
+
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: 250m
+      limits:
+        memory: 512Mi
+        cpu: "2"
+
+    probes:
+      liveness:
+        initialDelaySeconds: 10
+        periodSeconds: 60
+        timeoutSeconds: 10
+      readiness:
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 5
