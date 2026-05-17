@@ -39,11 +39,6 @@ spec:
               chmod 600 /zeroclaw-data/.zeroclaw/config.toml
               chown -R 65534:65534 /zeroclaw-data
           env:
-            - name: HTTPS_PROXY
-              valueFrom:
-                secretKeyRef:
-                  name: zeroclaw-api-key
-                  key: https_proxy
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -85,6 +80,11 @@ spec:
               containerPort: 42617
               protocol: TCP
           env:
+            - name: HTTPS_PROXY
+              valueFrom:
+                secretKeyRef:
+                  name: zeroclaw-api-key
+                  key: https_proxy
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
