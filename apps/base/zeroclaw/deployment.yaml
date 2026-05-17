@@ -10,6 +10,8 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: zeroclaw
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -32,7 +34,7 @@ spec:
               mkdir -p /zeroclaw-data/.zeroclaw /zeroclaw-data/workspace
               envsubst < /config/config.toml > /tmp/config.toml
               if [ ! -f /zeroclaw-data/.zeroclaw/config.toml ] || ! cmp -s /tmp/config.toml /zeroclaw-data/.zeroclaw/config.toml; then
-                cp /tmp/config.toml /zeroclaw-data/.zeroclaw/config.toml
+                cp -f /tmp/config.toml /zeroclaw-data/.zeroclaw/config.toml
               fi
               chmod 600 /zeroclaw-data/.zeroclaw/config.toml
               chown -R 65534:65534 /zeroclaw-data
@@ -69,6 +71,7 @@ spec:
                 - ALL
               add:
                 - CHOWN
+                - DAC_OVERRIDE
                 - FOWNER
             seccompProfile:
               type: RuntimeDefault
