@@ -33,3 +33,9 @@ data:
     [providers.models."custom:https://foundation-models.api.cloud.ru/v1"]
     model = "Qwen/Qwen3-235B-A22B-Instruct-2507"
     api_key = "${OPENAI_API_KEY}"
+    
+    [proxy]
+    enabled = true
+    no_proxy = [".sleepfox.ru", "127.0.0.1", "localhost", "sleepfox.ru"]
+    scope = "services"
+    services = ["channel.telegram"]
