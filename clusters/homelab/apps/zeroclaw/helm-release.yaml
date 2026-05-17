@@ -29,7 +29,7 @@ spec:
     config:
       mode: daemon
       provider: custom:https://foundation-models.api.cloud.ru/v1
-      model: Qwen/Qwen3-235B-A22B-Instruct-2507
+      model: openai/gpt-oss-120b
       allowPublicBind: true
       requirePairing: true
       agent:
