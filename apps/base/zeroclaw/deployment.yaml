@@ -30,8 +30,9 @@ spec:
             - |
               apk add --no-cache gettext >/dev/null
               mkdir -p /zeroclaw-data/.zeroclaw /zeroclaw-data/workspace
-              if [ ! -f /zeroclaw-data/.zeroclaw/config.toml ]; then
-                envsubst < /config/config.toml > /zeroclaw-data/.zeroclaw/config.toml
+              envsubst < /config/config.toml > /tmp/config.toml
+              if [ ! -f /zeroclaw-data/.zeroclaw/config.toml ] || ! cmp -s /tmp/config.toml /zeroclaw-data/.zeroclaw/config.toml; then
+                cp /tmp/config.toml /zeroclaw-data/.zeroclaw/config.toml
               fi
               chmod 600 /zeroclaw-data/.zeroclaw/config.toml
               chown -R 65534:65534 /zeroclaw-data
