@@ -1,0 +1,19 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: opensearch
+  namespace: homelab
+spec:
+  releaseName: opensearch
+  interval: 5m
+  install:
+    remediation:
+      retries: 3
+  chart:
+    spec:
+      chart: opensearch
+      sourceRef:
+        kind: HelmRepository
+        name: opensearch
+        namespace: homelab

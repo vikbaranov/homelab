@@ -22,6 +22,7 @@ resources:
   - ../../base/jellyfin
   - ../../base/mattermost
   - ../../base/n8n
+  - ../../base/opensearch
   - ../../base/open-webui
   - ../../base/podinfo
   - ../../base/qbittorrent

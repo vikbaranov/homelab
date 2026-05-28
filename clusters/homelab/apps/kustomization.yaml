@@ -22,6 +22,7 @@ resources:
   - jellyfin
   - misc
   - n8n
+  - opensearch
   - open-webui
   - qbittorrent
   - vaultwarden
@@ -96,6 +97,10 @@ patches:
     target:
       kind: HelmRelease
       name: n8n
+  - path: opensearch/helm-release.yaml
+    target:
+      kind: HelmRelease
+      name: opensearch
   - path: open-webui/open-webui-values.yaml
     target:
       kind: HelmRelease
