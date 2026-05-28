@@ -19,7 +19,7 @@ spec:
     persistence:
       enabled: true
       storageClass: local
-      size: 5Gi
+      size: 2Gi
     protocol: http
     securityConfig:
       enabled: false
