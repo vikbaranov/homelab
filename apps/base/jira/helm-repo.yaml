@@ -1,9 +1,0 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: atlassian-data-center
-  namespace: homelab
-spec:
-  interval: 120m
-  url: https://atlassian.github.io/data-center-helm-charts

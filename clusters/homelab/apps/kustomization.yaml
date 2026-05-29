@@ -20,7 +20,6 @@ resources:
   - istio
   - it-tools
   - jellyfin
-  - jira
   - misc
   - n8n
   - opensearch
@@ -90,10 +89,6 @@ patches:
     target:
       kind: HelmRelease
       name: jellyfin
-  - path: jira/jira-values.yaml
-    target:
-      kind: HelmRelease
-      name: jira
   - path: linstor/helm-release-cluster.yaml
     target:
       kind: HelmRelease
