@@ -1,0 +1,42 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jira
+  namespace: homelab
+spec:
+  values:
+    database:
+      type: postgres72
+      url: jdbc:postgresql://jira-db-rw:5432/jira?sslmode=require
+      driver: org.postgresql.Driver
+      credentials:
+        secretName: jira-db-app
+        usernameSecretKey: username
+        passwordSecretKey: password
+    gateway:
+      hostnames:
+        - jira.${cluster_subdomain}
+      https: true
+    volumes:
+      localHome:
+        persistentVolumeClaim:
+          create: true
+          storageClassName: local
+          resources:
+            requests:
+              storage: 1Gi
+      sharedHome:
+        persistentVolumeClaim:
+          create: true
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: local
+          resources:
+            requests:
+              storage: 1Gi
+    jira:
+      resources:
+        container:
+          requests:
+            cpu: 250m
+            memory: 2Gi

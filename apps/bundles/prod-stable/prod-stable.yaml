@@ -151,6 +151,16 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
+  name: jira
+  namespace: homelab
+spec:
+  chart:
+    spec:
+      version: "2.0.13"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
   name: mattermost
   namespace: homelab
 spec:

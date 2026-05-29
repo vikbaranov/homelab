@@ -20,6 +20,7 @@ resources:
   - ../../base/istio
   - ../../base/it-tools
   - ../../base/jellyfin
+  - ../../base/jira
   - ../../base/mattermost
   - ../../base/n8n
   - ../../base/opensearch
