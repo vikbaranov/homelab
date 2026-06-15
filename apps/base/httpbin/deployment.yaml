@@ -18,7 +18,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: httpbin
-          image: ghcr.io/mccutchen/go-httpbin:2.23.0
+          image: ghcr.io/mccutchen/go-httpbin:2.23.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
