@@ -44,6 +44,8 @@ patches:
   - path: csi-nfs/rm-objects.yaml
   # delete opensearch
   - path: opensearch/rm-objects.yaml
+  # delete n8n
+  - path: n8n/rm-objects.yaml
 
   - path: arc-runners/helm-release.yaml
     target:
