@@ -32,22 +32,16 @@ resources:
   - flux
   - ../misc
 patches:
-  # delete istio's gateways
-  - path: istio/rm-gw-internal.yaml
-  - path: istio/rm-gw-external.yaml
-  - path: istio/rm-helm-release.yaml
+  # delete istio
+  - path: istio/rm-objects.yaml
   # victoria-logs
-  - path: victoria-logs/rm-helm-release.yaml
-  - path: victoria-logs/rm-http-route.yaml
+  - path: victoria-logs/rm-objects.yaml
   # delete mattermost
-  - path: mattermost/rm-helm-release.yaml
-  - path: mattermost/rm-helm-repo.yaml
+  - path: mattermost/rm-objects.yaml
   # delete open-webui
-  - path: open-webui/rm-helm-release.yaml
-  - path: open-webui/rm-http-route.yaml
+  - path: open-webui/rm-objects.yaml
   # delete csi-nfs
-  - path: csi-nfs/rm-helm-release.yaml
-  - path: csi-nfs/rm-helm-repo.yaml
+  - path: csi-nfs/rm-objects.yaml
   # delete opensearch
   - path: opensearch/rm-objects.yaml
 

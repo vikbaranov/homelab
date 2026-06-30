@@ -1,4 +1,11 @@
 $patch: delete
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: csi-nfs
+  namespace: csi-nfs
+---
+$patch: delete
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
