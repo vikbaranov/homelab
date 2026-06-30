@@ -7,7 +7,7 @@ spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:17.2
   instances: 1
   storage:
-    size: 2Gi
+    size: 3Gi
     storageClass: local
   bootstrap:
     initdb:
