@@ -3,14 +3,14 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: n8n-db
-  namespace: monitoring
+  namespace: homelab
 ---
 $patch: delete
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: n8
-  namespace: monitoring
+  namespace: homelab
 ---
 $patch: delete
 apiVersion: gateway.networking.k8s.io/v1
