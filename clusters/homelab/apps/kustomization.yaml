@@ -48,6 +48,8 @@ patches:
   # delete csi-nfs
   - path: csi-nfs/rm-helm-release.yaml
   - path: csi-nfs/rm-helm-repo.yaml
+  # delete opensearch
+  - path: opensearch/rm-objects.yaml
 
   - path: arc-runners/helm-release.yaml
     target:
