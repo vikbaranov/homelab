@@ -6,5 +6,5 @@ spec:
   template:
     spec:
       containers:
-        - image: linuxserver/qbittorrent:5.2.1
+        - image: linuxserver/qbittorrent:5.2.2
           name: qbittorrent
